@@ -13,8 +13,6 @@ import { SleepHistoryModalComponent } from '../sleep/sleep-history-modal/sleep-h
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  currentDate: Date = new Date();
-
   // current events
   currentSleep: Sleep;
   currentFeeding: Feeding;
@@ -25,6 +23,10 @@ export class HomePage implements OnInit {
   previousSleep: Sleep;
   previousFeeding: Feeding;
 
+  // all events
+  allSleep: Sleep[];
+  allFeedings: Feeding[];
+
   constructor(
     public platform: Platform,
     public toastController: ToastController,
@@ -33,7 +35,7 @@ export class HomePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadDataFromStorage();
+    this.loadData();
 
     // initialize feeding
     this.currentFeeding = {
@@ -53,23 +55,23 @@ export class HomePage implements OnInit {
     });
   }
 
-  async loadDataFromStorage() {
-    // retrieve current sleep
-    this.currentSleep = await this.storageService.getCurrentSleep();
-    console.log('current sleep:', this.currentSleep);
+  async loadData() {
+    this.loadSleepData();
+    this.loadFeedingData();
+  }
 
-    // if loading page during sleep - show counter
+  private async loadSleepData() {
+    this.currentSleep = await this.storageService.getCurrentSleep();
+    this.previousSleep = await this.storageService.getPreviousSleep();
+    this.allSleep = await this.storageService.getAllSleep();
     if (this.currentSleep) {
       this.updateSleepCounter();
     }
+  }
 
-    // retrieve previous sleep
-    this.previousSleep = await this.storageService.getPreviousSleep();
-    console.log('previous sleep:', this.previousSleep);
-
-    // retrieve previous feeding
+  private async loadFeedingData() {
     this.previousFeeding = await this.storageService.getPreviousFeeding();
-    console.log('previous feeding:', this.previousFeeding);
+    this.allFeedings = await this.storageService.getAllFeedings();
   }
 
   get isAwake(): boolean {
@@ -140,11 +142,8 @@ export class HomePage implements OnInit {
     });
     toast.present();
 
-    // re-retrieve previous sleep
-    this.previousSleep = await this.storageService.getPreviousSleep();
-
-    // clear current sleep object
-    this.currentSleep = null;
+    // re-retrieve sleep data
+    this.loadSleepData();
 
     // stop sleep counter
     clearInterval(this.sleepCounterTimer);
@@ -170,9 +169,8 @@ export class HomePage implements OnInit {
     });
     toast.present();
 
-    // this.previousFeeding = this.currentFeeding;
-    // re-retrieve previous feeding
-    this.previousFeeding = await this.storageService.getPreviousFeeding();
+    // re-retrieve feeding data
+    this.loadFeedingData();
     this.currentFeeding = {
       ounces: 1
     } as Feeding;
@@ -185,7 +183,7 @@ export class HomePage implements OnInit {
     });
     await sleepModal.present();
     await sleepModal.onDidDismiss();
-    this.previousSleep = await this.storageService.getPreviousSleep();
+    this.loadSleepData();
   }
 
   async showFeedingHistory() {
@@ -195,7 +193,7 @@ export class HomePage implements OnInit {
     });
     await feedingModal.present();
     await feedingModal.onDidDismiss();
-    this.previousFeeding = await this.storageService.getPreviousFeeding();
+    this.loadFeedingData();
   }
 
 }

@@ -14,35 +14,40 @@
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <ion-card class="tracker-action">
+  <div>
+    <ion-card class="tracker-action" class="ion-text-center">
       <ion-item>
         <ion-icon name="bed-outline" slot="start"></ion-icon>
         <ion-label>Sleep</ion-label>
-        <ion-button fill="outline" slot="end" (click)="showSleepHistory()">
+        <ion-button fill="outline" slot="end"
+          [disabled]="!allSleep || allSleep.length === 0"
+          (click)="showSleepHistory()">
           History
         </ion-button>
       </ion-item>
       <ion-card-content>
-        <ion-text *ngIf="isAwake && !previousSleep">
-          <h2>No previous sleep data</h2>
-        </ion-text>
-        <ion-text *ngIf="isAwake && previousSleep">
-          <h2>Awake since: {{ formatTimeString(previousSleep.wakeTime) }}</h2>
-        </ion-text>
-        <ion-text *ngIf="!isAwake">
-          <h2>Asleep since: {{ formatTimeString(currentSleep.sleepTime) }}</h2>
-        </ion-text>
-        
-        <div [ngSwitch]="!isAwake">
-          <div *ngSwitchCase="true">
-            <ion-text color="success" class="counter">
-              <h1>{{ sleepCounter }}</h1>
-            </ion-text>
+        <div class="sleep-data">
+          <div [ngSwitch]="!isAwake">
+            <div *ngSwitchCase="true">
+              <ion-text color="success">
+                <h2>{{ sleepCounter }}</h2>
+              </ion-text>
+            </div>
+            <div *ngSwitchDefault>
+              <ion-text color="dark">
+                <h2>Not Sleeping</h2>
+              </ion-text>
+            </div>
           </div>
-          <div *ngSwitchDefault>
-            <ion-text color="dark" class="counter">
-              <h1>Not Sleeping</h1>
+          <div>
+            <ion-text *ngIf="isAwake && !previousSleep">
+              <h2>No previous sleep data</h2>
+            </ion-text>
+            <ion-text *ngIf="isAwake && previousSleep">
+              <h2>Awake since: {{ formatTimeString(previousSleep.wakeTime) }}</h2>
+            </ion-text>
+            <ion-text *ngIf="!isAwake">
+              <h2>Asleep since: {{ formatTimeString(currentSleep.sleepTime) }}</h2>
             </ion-text>
           </div>
         </div>
@@ -55,11 +60,13 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-card>
+    <ion-card class="ion-text-center">
       <ion-item>
         <ion-icon name="water-outline" slot="start"></ion-icon>
         <ion-label>Food</ion-label>
-        <ion-button fill="outline" slot="end" (click)="showFeedingHistory()">
+        <ion-button fill="outline" slot="end"
+          [disabled]="!allFeedings || allFeedings.length === 0"
+          (click)="showFeedingHistory()">
           History
         </ion-button>
       </ion-item>
@@ -78,7 +85,7 @@
         </div>
 
         <ion-text color="dark">
-          <h1>Specify a feeding amount:</h1>
+          <h1>Enter feeding</h1>
         </ion-text>
         <div class="feed-amount-container">
           <ion-button size="large" color="secondary" slot="start"
