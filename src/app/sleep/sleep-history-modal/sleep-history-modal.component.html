@@ -18,7 +18,7 @@
       </ion-list-header>
       <ion-item-sliding *ngFor="let sleep of sleepDay.value">
         <ion-item-options side="start">
-          <ion-item-option color="primary">Modify</ion-item-option>
+          <ion-item-option color="primary" (click)="editSleep(sleep)">Modify</ion-item-option>
           <ion-item-option color="danger" (click)="deleteSleep(sleep)">Delete</ion-item-option>
         </ion-item-options>
         <ion-item>

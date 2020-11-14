@@ -4,6 +4,7 @@ import { Sleep } from '../../models/sleep';
 import { StorageService } from '../../services/storage.service';
 import * as moment from 'moment';
 import { isThisWeek, isToday, isYesterday } from '../../services/date-helpers';
+import { SleepEditModalComponent } from '../sleep-edit-modal/sleep-edit-modal.component';
 
 @Component({
   selector: 'app-sleep-history-modal',
@@ -76,6 +77,16 @@ export class SleepHistoryModalComponent implements OnInit {
     durationString += duration.minutes() > 0 ? duration.minutes() + 'min ' : '';
     durationString += duration.seconds() > 0 ? duration.seconds() + 'sec' : '';
     return durationString;
+  }
+
+  async editSleep(sleep: Sleep) {
+    const modal = await this.modalController.create({
+      component: SleepEditModalComponent,
+      componentProps: { sleep }
+    });
+    await modal.present();
+    await modal.onDidDismiss();
+    this.ngOnInit();
   }
 
   async deleteSleep(sleep: Sleep) {

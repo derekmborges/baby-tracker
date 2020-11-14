@@ -44,7 +44,6 @@ export class FeedingHistoryModalComponent implements OnInit {
       const key = isToday(feeding.time) ? 'Today'
                 : isYesterday(feeding.time) ? 'Yesterday'
                 : this.formatDateString(feeding.time);
-      console.log(`${this.formatDateString(feeding.time)} = ${key}`);
       const dayCollection = groupedFeedings.get(key);
       if (!dayCollection) {
         groupedFeedings.set(key, [feeding]);

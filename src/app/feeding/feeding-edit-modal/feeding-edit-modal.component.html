@@ -13,24 +13,31 @@
         <ion-text>Amount</ion-text>
       </ion-list-header>
       <ion-item>
-        <ion-label>Ounces</ion-label>
-        <ion-text>
-          <h2>{{ feeding.ounces }}</h2>
-        </ion-text>
+        <ion-label>{{ feeding.ounces }}oz</ion-label>
+        <ion-range min="0" max="20" step="1" snaps="true"
+          [value]="feeding.ounces" (ionChange)="ouncesChanged($event)">
+          <ion-label slot="start">0</ion-label>
+          <ion-label slot="end">20</ion-label>
+        </ion-range>
       </ion-item>
       <ion-list-header>
         <ion-text>When</ion-text>
       </ion-list-header>
       <ion-item>
         <ion-label>Date</ion-label>
-        <ion-datetime displayFormat="MM/DD/YYYY" [value]="feeding.time"></ion-datetime>
+        <ion-datetime displayFormat="MM/DD/YYYY"
+          [value]="feeding.time"
+          (ionChange)="dateTimeChanged($event)"></ion-datetime>
       </ion-item>
       <ion-item>
         <ion-label>Time</ion-label>
-        <ion-datetime displayFormat="h:mm a" [value]="feeding.time"></ion-datetime>
+        <ion-datetime displayFormat="h:mm a"
+          [value]="feeding.time"
+          (ionChange)="dateTimeChanged($event)"></ion-datetime>
       </ion-item>
     </ion-list>
-    <ion-button color="primary" expand="block" class="save">
+    <ion-button color="primary" expand="block" class="save"
+      (click)="save()">
       Save
     </ion-button>
   </div>

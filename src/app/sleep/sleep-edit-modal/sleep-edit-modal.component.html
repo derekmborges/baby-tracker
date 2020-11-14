@@ -1,3 +1,48 @@
-<p>
-  sleep-edit-modal works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Edit Sleep</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div *ngIf="sleep">
+    <ion-list>
+      <ion-list-header>
+        <ion-text>Went to sleep</ion-text>
+      </ion-list-header>
+      <ion-item>
+        <ion-label>Date</ion-label>
+        <ion-datetime displayFormat="MM/DD/YYYY"
+          [value]="sleep.sleepTime"
+          (ionChange)="sleepChanged($event)"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>Time</ion-label>
+        <ion-datetime displayFormat="h:mm a"
+          [value]="sleep.sleepTime"
+          (ionChange)="sleepChanged($event)"></ion-datetime>
+      </ion-item>
+      <ion-list-header>
+        <ion-text>Woke up</ion-text>
+      </ion-list-header>
+      <ion-item>
+        <ion-label>Date</ion-label>
+        <ion-datetime displayFormat="MM/DD/YYYY"
+          [value]="sleep.wakeTime"
+          (ionChange)="wakeChanged($event)"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>Time</ion-label>
+        <ion-datetime displayFormat="h:mm a"
+          [value]="sleep.wakeTime"
+          (ionChange)="wakeChanged($event)"></ion-datetime>
+      </ion-item>
+    </ion-list>
+    <ion-button color="primary" expand="block" class="save"
+      (click)="save()">
+      Save
+    </ion-button>
+  </div>
+</ion-content>

@@ -48,6 +48,17 @@ export class StorageService {
     await this.storage.set('feedings', JSON.stringify(allFeedings));
   }
 
+  async updateFeeding(updatedFeeding: Feeding) {
+    let allFeedings = await this.getAllFeedings();
+    allFeedings.forEach(feeding => {
+      if (feeding.id === updatedFeeding.id) {
+        feeding.ounces = updatedFeeding.ounces;
+        feeding.time = updatedFeeding.time;
+      }
+    })
+    await this.storage.set('feedings', JSON.stringify(allFeedings));
+  }
+
 
 
 
@@ -93,6 +104,17 @@ export class StorageService {
   async deleteSleep(sleep: Sleep) {
     let allSleep = await this.getAllSleep();
     allSleep = allSleep.filter(s => s.id !== sleep.id);
+    await this.storage.set('sleep', JSON.stringify(allSleep));
+  }
+
+  async updateSleep(updatedSleep: Sleep) {
+    let allSleep = await this.getAllSleep();
+    allSleep.forEach(sleep => {
+      if (sleep.id === updatedSleep.id) {
+        sleep.sleepTime = updatedSleep.sleepTime;
+        sleep.wakeTime = updatedSleep.wakeTime;
+      }
+    })
     await this.storage.set('sleep', JSON.stringify(allSleep));
   }
 }
