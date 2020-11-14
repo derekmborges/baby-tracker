@@ -3,7 +3,6 @@
     <ion-title>
       Luka Tracker
     </ion-title>
-    <ion-title slot="end">{{ currentDate | date }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -29,26 +28,22 @@
         <div class="sleep-data">
           <div [ngSwitch]="!isAwake">
             <div *ngSwitchCase="true">
-              <ion-text color="success">
-                <h2>{{ sleepCounter }}</h2>
-              </ion-text>
+              <ion-note color="success">{{ sleepCounter }}</ion-note>
             </div>
             <div *ngSwitchDefault>
-              <ion-text color="dark">
-                <h2>Not Sleeping</h2>
-              </ion-text>
+              <ion-note color="dark">Not Sleeping</ion-note>
             </div>
           </div>
           <div>
-            <ion-text *ngIf="isAwake && !previousSleep">
-              <h2>No previous sleep data</h2>
-            </ion-text>
-            <ion-text *ngIf="isAwake && previousSleep">
-              <h2>Awake since: {{ formatTimeString(previousSleep.wakeTime) }}</h2>
-            </ion-text>
-            <ion-text *ngIf="!isAwake">
-              <h2>Asleep since: {{ formatTimeString(currentSleep.sleepTime) }}</h2>
-            </ion-text>
+            <ion-note color="medium" *ngIf="isAwake && !previousSleep">
+              No previous sleep data
+            </ion-note>
+            <ion-note color="medium" *ngIf="isAwake && previousSleep">
+              Awake since: {{ formatTimeString(previousSleep.wakeTime) }}
+            </ion-note>
+            <ion-note color="medium" *ngIf="!isAwake">
+              Asleep since: {{ formatTimeString(currentSleep.sleepTime) }}
+            </ion-note>
           </div>
         </div>
 
@@ -73,37 +68,38 @@
       <ion-card-content>
         <div [ngSwitch]="previousFeeding != undefined">
           <div *ngSwitchCase="true">
-            <ion-text>
-              <h2>Last feed: {{ previousFeeding.ounces }} oz at {{ formatTimeString(previousFeeding.time) }}</h2>
-            </ion-text>
+            <ion-note color="medium">
+              Last feed: {{ previousFeeding.ounces }} oz at {{ formatTimeString(previousFeeding.time) }}
+            </ion-note>
           </div>
           <div *ngSwitchDefault>
-            <ion-text>
-              <h2>No previous feeding data</h2>
-            </ion-text>
+            <ion-note color="medium">No previous feeding data</ion-note>
           </div>
         </div>
 
-        <ion-text color="dark">
-          <h1>Enter feeding</h1>
-        </ion-text>
-        <div class="feed-amount-container">
-          <ion-button size="large" color="secondary" slot="start"
-            (click)="removeOunce()" [disabled]="currentFeeding.ounces<1">
-            <ion-icon name="remove-outline"></ion-icon>
-          </ion-button>
-          <ion-text>
-            <h1>{{ currentFeeding.ounces }} oz</h1>
+        <div class="feed-form">
+          <ion-text color="dark">
+            <h1>Enter Feeding</h1>
           </ion-text>
-          <ion-button size="large" color="secondary" slot="end"
-            (click)="addOunce()">
-            <ion-icon name="add-outline"></ion-icon>
+          <div class="feed-amount-container">
+            <ion-button size="large" color="secondary" slot="start"
+              (click)="removeOunce()"
+              [disabled]="currentFeeding.ounces < 1">
+              <ion-icon name="remove-outline"></ion-icon>
+            </ion-button>
+            <ion-text>
+              <h1>{{ currentFeeding.ounces }} oz</h1>
+            </ion-text>
+            <ion-button size="large" color="secondary" slot="end"
+              (click)="addOunce()">
+              <ion-icon name="add-outline"></ion-icon>
+            </ion-button>
+          </div>
+          <ion-button color="primary" expand="block" class="block-button"
+            (click)="saveFeeding()">
+            Add Feeding
           </ion-button>
         </div>
-        <ion-button color="primary" expand="block" class="block-button"
-          (click)="saveFeeding()">
-          Add Feeding
-        </ion-button>
       </ion-card-content>
     </ion-card>
   </div>
