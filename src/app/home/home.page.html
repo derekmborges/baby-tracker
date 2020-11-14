@@ -1,20 +1,103 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      Luka Tracker
     </ion-title>
+    <ion-title slot="end">{{ currentDate | date }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title size="large">Luka Tracker</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <ion-card class="tracker-action">
+      <ion-item>
+        <ion-icon name="bed-outline" slot="start"></ion-icon>
+        <ion-label>Sleep</ion-label>
+        <ion-button fill="outline" slot="end" (click)="showSleepHistory()">
+          History
+        </ion-button>
+      </ion-item>
+      <ion-card-content>
+        <ion-text *ngIf="isAwake && !previousSleep">
+          <h2>No previous sleep data</h2>
+        </ion-text>
+        <ion-text *ngIf="isAwake && previousSleep">
+          <h2>Awake since: {{ formatTimeString(previousSleep.wakeTime) }}</h2>
+        </ion-text>
+        <ion-text *ngIf="!isAwake">
+          <h2>Asleep since: {{ formatTimeString(currentSleep.sleepTime) }}</h2>
+        </ion-text>
+        
+        <div [ngSwitch]="!isAwake">
+          <div *ngSwitchCase="true">
+            <ion-text color="success" class="counter">
+              <h1>{{ sleepCounter }}</h1>
+            </ion-text>
+          </div>
+          <div *ngSwitchDefault>
+            <ion-text color="dark" class="counter">
+              <h1>Not Sleeping</h1>
+            </ion-text>
+          </div>
+        </div>
+
+        <ion-button expand="block" class="block-button"
+          (click)="toggleSleep()"
+          color="primary">
+          {{ isAwake ? 'Start Sleep' : 'End Sleep' }}
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-icon name="water-outline" slot="start"></ion-icon>
+        <ion-label>Food</ion-label>
+        <ion-button fill="outline" slot="end" (click)="showFeedingHistory()">
+          History
+        </ion-button>
+      </ion-item>
+      <ion-card-content>
+        <div [ngSwitch]="previousFeeding != undefined">
+          <div *ngSwitchCase="true">
+            <ion-text>
+              <h2>Last feed: {{ previousFeeding.ounces }} oz at {{ formatTimeString(previousFeeding.time) }}</h2>
+            </ion-text>
+          </div>
+          <div *ngSwitchDefault>
+            <ion-text>
+              <h2>No previous feeding data</h2>
+            </ion-text>
+          </div>
+        </div>
+
+        <ion-text color="dark">
+          <h1>Specify a feeding amount:</h1>
+        </ion-text>
+        <div class="feed-amount-container">
+          <ion-button size="large" color="secondary" slot="start"
+            (click)="removeOunce()" [disabled]="currentFeeding.ounces<1">
+            <ion-icon name="remove-outline"></ion-icon>
+          </ion-button>
+          <ion-text>
+            <h1>{{ currentFeeding.ounces }} oz</h1>
+          </ion-text>
+          <ion-button size="large" color="secondary" slot="end"
+            (click)="addOunce()">
+            <ion-icon name="add-outline"></ion-icon>
+          </ion-button>
+        </div>
+        <ion-button color="primary" expand="block" class="block-button"
+          (click)="saveFeeding()">
+          Add Feeding
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>

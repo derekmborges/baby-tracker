@@ -25,3 +25,24 @@
 #container a {
   text-decoration: none;
 }
+
+.counter {
+  font-size: 26pt;
+}
+
+.feed-amount-container {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.feed-amount {
+  font-size: 22pt;
+}
+
+.block-button {
+  margin-top: 1rem;
+}
