@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { Feeding } from '../models/feeding';
 import { Sleep } from '../models/sleep';
 import * as moment from 'moment';
@@ -29,6 +29,7 @@ export class HomePage implements OnInit {
 
   constructor(
     public platform: Platform,
+    private ngZone: NgZone,
     public toastController: ToastController,
     public modalController: ModalController,
     private storageService: StorageService
@@ -46,12 +47,15 @@ export class HomePage implements OnInit {
     this.platform.pause.subscribe(() => {
       console.log('app paused');
       clearInterval(this.sleepCounterTimer);
+      this.sleepCounterTimer = undefined;
     });
     this.platform.resume.subscribe(() => {
-      console.log('app resumed');
-      if (this.currentSleep) {
-        this.updateSleepCounter();
-      }
+      this.ngZone.run(() => {
+        console.log('app resumed');
+        if (!this.isAwake) {
+          this.updateSleepCounter();
+        }
+      });
     });
   }
 
