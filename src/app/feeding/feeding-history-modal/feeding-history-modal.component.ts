@@ -3,7 +3,7 @@ import { Feeding } from '../../models/feeding';
 import { StorageService } from '../../services/storage.service';
 import * as moment from 'moment';
 import { AlertController, ModalController, ToastController } from '@ionic/angular';
-import { isToday, isYesterday } from '../../helpers/date-helpers';
+import { formatDateString, formatTimeString, isToday, isYesterday } from '../../helpers/date-helpers';
 import { FeedingEditModalComponent } from '../feeding-edit-modal/feeding-edit-modal.component';
 
 @Component({
@@ -22,6 +22,14 @@ export class FeedingHistoryModalComponent implements OnInit {
     private storageService: StorageService
   ) { }
 
+  toTimeString(date: Date): string {
+    return formatTimeString(date);
+  }
+
+  toDateString(date: Date): string {
+    return formatDateString(date);
+  }
+
   get showFeedings(): boolean {
     return this.groupedFeedings && this.groupedFeedings.size > 0;
   }
@@ -33,6 +41,9 @@ export class FeedingHistoryModalComponent implements OnInit {
 
   private async getAndSortFeedings() {
     const allFeedings = await this.storageService.getAllFeedings();
+    if (allFeedings.length === 0) {
+      this.close();
+    }
     this.feedings = allFeedings.sort((a: Feeding, b: Feeding) => {
       return moment(b.time).diff(moment(a.time));
     });
@@ -43,7 +54,7 @@ export class FeedingHistoryModalComponent implements OnInit {
     this.feedings.forEach(feeding => {
       const key = isToday(feeding.time) ? 'Today'
                 : isYesterday(feeding.time) ? 'Yesterday'
-                : this.formatDateString(feeding.time);
+                : formatDateString(feeding.time);
       const dayCollection = groupedFeedings.get(key);
       if (!dayCollection) {
         groupedFeedings.set(key, [feeding]);
@@ -60,14 +71,6 @@ export class FeedingHistoryModalComponent implements OnInit {
       .reduce((previous, current) => previous + current);
   }
 
-  formatTimeString(date: Date): string {
-    return moment(date).format('h:mm A');
-  }
-
-  formatDateString(date: Date): string {
-    return moment(date).format('MM/D/YYYY');
-  }
-
   async editFeeding(feeding: Feeding) {
     const modal = await this.modalController.create({
       component: FeedingEditModalComponent,
@@ -80,7 +83,7 @@ export class FeedingHistoryModalComponent implements OnInit {
 
   async deleteFeeding(feeding: Feeding) {
     const alert = await this.alertController.create({
-      header: `Feeding: ${feeding.ounces}oz at ${this.formatTimeString(feeding.time)}`,
+      header: `Feeding: ${feeding.ounces}oz at ${formatTimeString(feeding.time)}`,
       message: 'Are you sure you want to delete this feeding?',
       buttons: [
         {

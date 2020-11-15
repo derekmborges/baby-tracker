@@ -3,7 +3,7 @@ import { AlertController, ModalController, ToastController } from '@ionic/angula
 import { Sleep } from '../../models/sleep';
 import { StorageService } from '../../services/storage.service';
 import * as moment from 'moment';
-import { isThisWeek, isToday, isYesterday } from '../../helpers/date-helpers';
+import { formatDateString, formatDayString, formatTimeString, isToday, isWithinWeek, isYesterday } from '../../helpers/date-helpers';
 import { SleepEditModalComponent } from '../sleep-edit-modal/sleep-edit-modal.component';
 
 @Component({
@@ -22,6 +22,14 @@ export class SleepHistoryModalComponent implements OnInit {
     private storageService: StorageService
   ) { }
 
+  toTimeString(date: Date): string {
+    return formatTimeString(date);
+  }
+
+  toDateString(date: Date): string {
+    return formatDateString(date);
+  }
+
   get showSleep(): boolean {
     return this.groupedSleep && this.groupedSleep.size > 0;
   }
@@ -33,6 +41,9 @@ export class SleepHistoryModalComponent implements OnInit {
 
   private async getAndSortSleep() {
     const allSleep = await this.storageService.getAllSleep();
+    if (allSleep.length === 0) {
+      this.close();
+    }
     this.allSleep = allSleep.sort((a: Sleep, b: Sleep) => {
       return moment(b.sleepTime).diff(moment(a.sleepTime));
     });
@@ -43,9 +54,9 @@ export class SleepHistoryModalComponent implements OnInit {
     this.allSleep.forEach(sleep => {
       const key = isToday(sleep.sleepTime) ? 'Today'
                 : isYesterday(sleep.sleepTime) ? 'Yesterday'
-                : this.isWithinWeek(sleep.sleepTime) ? moment(sleep.sleepTime).format('dddd')
-                : this.formatDateString(sleep.sleepTime);
-      console.log(`${this.formatDateString(sleep.sleepTime)} = ${key}`);
+                : isWithinWeek(sleep.sleepTime) ? formatDayString(sleep.sleepTime)
+                : formatDateString(sleep.sleepTime);
+      console.log(`${formatDateString(sleep.sleepTime)} = ${key}`);
       const dayCollection = groupedSleep.get(key);
       if (!dayCollection) {
         groupedSleep.set(key, [sleep]);
@@ -54,20 +65,6 @@ export class SleepHistoryModalComponent implements OnInit {
       }
     });
     this.groupedSleep = groupedSleep;
-  }
-
-  private isWithinWeek(date: Date): boolean {
-    const sevenDaysAgo = moment().subtract(7, 'days');
-    console.log(`${this.formatDateString(date)} within week: ${moment.duration(sevenDaysAgo.diff(moment(date))).days()}`);
-    return moment.duration(sevenDaysAgo.diff(moment(date))).days() <= 7;
-  }
-
-  formatTimeString(date: Date): string {
-    return moment(date).format('h:mm A');
-  }
-
-  formatDateString(date: Date): string {
-    return moment(date).format('MM/D/YYYY');
   }
 
   sleepDuration(sleep: Sleep): string {
@@ -91,7 +88,7 @@ export class SleepHistoryModalComponent implements OnInit {
 
   async deleteSleep(sleep: Sleep) {
     const alert = await this.alertController.create({
-      header: `Sleep: ${this.formatTimeString(sleep.sleepTime)} - ${this.formatTimeString(sleep.wakeTime)}`,
+      header: `Sleep: ${formatTimeString(sleep.sleepTime)} - ${formatTimeString(sleep.wakeTime)}`,
       message: 'Are you sure you want to delete this sleep?',
       buttons: [
         {
