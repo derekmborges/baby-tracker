@@ -1,0 +1,40 @@
+<ion-card class="tracker-action" class="ion-text-center">
+  <ion-item>
+    <ion-icon name="bed-outline" slot="start"></ion-icon>
+    <ion-label>Sleep</ion-label>
+    <ion-button fill="outline" slot="end"
+      [disabled]="!allSleep || allSleep.length === 0"
+      (click)="showSleepHistory()">
+      History
+    </ion-button>
+  </ion-item>
+  <ion-card-content>
+    <div class="sleep-data">
+      <div [ngSwitch]="!isAwake">
+        <div *ngSwitchCase="true">
+          <ion-note color="success">{{ sleepCounter }}</ion-note>
+        </div>
+        <div *ngSwitchDefault>
+          <ion-note color="dark">Not Sleeping</ion-note>
+        </div>
+      </div>
+      <div>
+        <ion-note color="medium" *ngIf="isAwake && !previousSleep">
+          No previous sleep data
+        </ion-note>
+        <ion-note color="medium" *ngIf="isAwake && previousSleep">
+          Awake since: {{ toTimeString(previousSleep.wakeTime) }}
+        </ion-note>
+        <ion-note color="medium" *ngIf="!isAwake">
+          Asleep since: {{ toTimeString(currentSleep.sleepTime) }}
+        </ion-note>
+      </div>
+    </div>
+
+    <ion-button expand="block" class="block-button"
+      (click)="toggleSleep()"
+      color="primary">
+      {{ isAwake ? 'Start Sleep' : 'End Sleep' }}
+    </ion-button>
+  </ion-card-content>
+</ion-card>
