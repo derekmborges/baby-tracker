@@ -3,7 +3,7 @@ import { AlertController, ModalController, ToastController } from '@ionic/angula
 import { Sleep } from '../../models/sleep';
 import { StorageService } from '../../services/storage.service';
 import * as moment from 'moment';
-import { isThisWeek, isToday, isYesterday } from '../../services/date-helpers';
+import { isThisWeek, isToday, isYesterday } from '../../helpers/date-helpers';
 import { SleepEditModalComponent } from '../sleep-edit-modal/sleep-edit-modal.component';
 
 @Component({

@@ -3,7 +3,7 @@ import { Feeding } from '../../models/feeding';
 import { StorageService } from '../../services/storage.service';
 import * as moment from 'moment';
 import { AlertController, ModalController, ToastController } from '@ionic/angular';
-import { isToday, isYesterday } from '../../services/date-helpers';
+import { isToday, isYesterday } from '../../helpers/date-helpers';
 import { FeedingEditModalComponent } from '../feeding-edit-modal/feeding-edit-modal.component';
 
 @Component({

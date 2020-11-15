@@ -1,8 +1,8 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { Feeding } from '../models/feeding';
 import { Sleep } from '../models/sleep';
 import * as moment from 'moment';
-import { ModalController, Platform, ToastController } from '@ionic/angular';
+import { AnimationController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
 import { FeedingHistoryModalComponent } from '../feeding/feeding-history-modal/feeding-history-modal.component';
 import { SleepHistoryModalComponent } from '../sleep/sleep-history-modal/sleep-history-modal.component';
@@ -12,7 +12,9 @@ import { SleepHistoryModalComponent } from '../sleep/sleep-history-modal/sleep-h
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, AfterViewInit {
+  @ViewChild('page') pageElement;
+
   // current events
   currentSleep: Sleep;
   currentFeeding: Feeding;
@@ -29,11 +31,21 @@ export class HomePage implements OnInit {
 
   constructor(
     public platform: Platform,
-    private ngZone: NgZone,
     public toastController: ToastController,
     public modalController: ModalController,
+    public animationController: AnimationController,
+    private ngZone: NgZone,
     private storageService: StorageService
   ) {}
+
+  ngAfterViewInit(): void {
+    // animate page in
+    this.animationController.create()
+      .addElement(this.pageElement.nativeElement)
+      .duration(300)
+      .fromTo('opacity', '0', '1')
+      .play();
+  }
 
   ngOnInit() {
     this.loadData();

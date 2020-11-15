@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Feeding } from '../models/feeding';
 import { Sleep } from '../models/sleep';
-import { Guid } from './guid';
+import { Guid } from '../helpers/guid';
 
 @Injectable({
   providedIn: 'root'
