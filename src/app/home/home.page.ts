@@ -13,6 +13,7 @@ import { SleepHistoryModalComponent } from '../sleep/sleep-history-modal/sleep-h
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, AfterViewInit {
+  @ViewChild('title') titleElement;
   @ViewChild('page') pageElement;
 
   // current events
@@ -39,11 +40,25 @@ export class HomePage implements OnInit, AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
+    // animate title in
+    this.animationController.create()
+      .addElement(this.titleElement.nativeElement)
+      .duration(1000)
+      .keyframes([
+        { offset: 0, opacity: 0 },
+        { offset: 0.5, opacity: 1}
+      ])
+      .play();
+
     // animate page in
     this.animationController.create()
       .addElement(this.pageElement.nativeElement)
-      .duration(300)
-      .fromTo('opacity', '0', '1')
+      .duration(1000)
+      .keyframes([
+        { offset: 0, opacity: 0 },
+        { offset: 0.5, opacity: 0 },
+        { offset: 1, opacity: 1}
+      ])
       .play();
   }
 

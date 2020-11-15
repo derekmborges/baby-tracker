@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Feeding } from '../../models/feeding';
 import { StorageService } from '../../services/storage.service';
 import * as moment from 'moment';
