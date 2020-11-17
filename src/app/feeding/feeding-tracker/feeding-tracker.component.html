@@ -1,7 +1,22 @@
-<ion-card class="ion-text-center">
+<ion-card>
   <ion-item>
     <ion-icon name="water-outline" slot="start"></ion-icon>
     <ion-label>Food</ion-label>
+
+
+    
+    <div [ngSwitch]="previousFeeding != undefined">
+      <div *ngSwitchCase="true">
+        <ion-note slot="end" *ngIf="previousFeeding">
+          Prev: {{ toTimeString(previousFeeding.time) }}
+        </ion-note>
+      </div>
+      <div *ngSwitchDefault>
+        <ion-note slot="end">
+          No History
+        </ion-note>
+      </div>
+    </div>
     <ion-button fill="outline" slot="end"
       [disabled]="!allFeedings || allFeedings.length === 0"
       (click)="showFeedingHistory()">
@@ -9,35 +24,103 @@
     </ion-button>
   </ion-item>
   <ion-card-content>
-    <div [ngSwitch]="previousFeeding != undefined">
-      <div *ngSwitchCase="true">
-        <ion-note color="medium">
-          Last feed: {{ previousFeeding.ounces }} oz at {{ toTimeString(previousFeeding.time) }}
-        </ion-note>
-      </div>
-      <div *ngSwitchDefault>
-        <ion-note color="medium">No previous feeding data</ion-note>
-      </div>
-    </div>
-
-    <div class="feed-form">
+    <div class="feed-form ion-text-center">
       <ion-text color="dark">
-        <h1>Enter Feeding</h1>
+        <h1>Select Type</h1>
       </ion-text>
-      <div class="feed-amount-container">
-        <ion-button size="large" color="secondary" slot="start"
-          (click)="removeOunce()"
-          [disabled]="currentFeeding.ounces < 1">
-          <ion-icon name="remove-outline"></ion-icon>
-        </ion-button>
-        <ion-text>
-          <h1>{{ currentFeeding.ounces }} oz</h1>
-        </ion-text>
-        <ion-button size="large" color="secondary" slot="end"
-          (click)="addOunce()">
-          <ion-icon name="add-outline"></ion-icon>
-        </ion-button>
+
+      <ion-segment class="feed-type"
+        [value]="currentFeeding.type"
+        (ionChange)="typeChanged($event)">
+        <ion-segment-button [value]="breastType">
+          <ion-label>Breast</ion-label>
+        </ion-segment-button>
+        <ion-segment-button [value]="bottleType">
+          <ion-label>Bottle</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
+      <div [ngSwitch]="currentFeeding.type" #feedingDetails>
+        <div *ngSwitchCase="breastType" class="feed-container">
+          <div [ngSwitch]="currentFeeding.breastDetails.left === true"
+            class="breast-detail"
+            [class.enabled]="currentFeeding.breastDetails.left">
+            <div *ngSwitchCase="false" class="breast-detail-disabled">
+              <ion-button color="medium" fill="clear" (click)="toggleLeftBreast()">
+                Left
+              </ion-button>
+            </div>
+            <div *ngSwitchDefault class="breast-detail-data">
+              <ion-icon name="close-outline" class="disable-breast"
+                (click)="toggleLeftBreast()">
+              </ion-icon>
+              <ion-text color="secondary">
+                <h2>Left</h2>
+              </ion-text>
+              <ion-note color="dark">
+                How'd he feed?
+              </ion-note>
+              <div class="breast-feedback">
+                <ion-icon name="happy-outline"
+                  (click)="selectLeftFeedback('happy')"
+                  [class.happy-selected]="currentFeeding.breastDetails.leftRating === 'happy'">
+                </ion-icon>
+                <ion-icon name="sad-outline"
+                  (click)="selectLeftFeedback('sad')"
+                  [class.sad-selected]="currentFeeding.breastDetails.leftRating === 'sad'">
+                </ion-icon>
+              </div>
+            </div>
+          </div>
+
+          <div [ngSwitch]="currentFeeding.breastDetails.right === true"
+            class="breast-detail"
+            [class.enabled]="currentFeeding.breastDetails.right">
+            <div *ngSwitchCase="false" class="breast-detail-disabled">
+              <ion-button color="medium" fill="clear" (click)="toggleRightBreast()">
+                Right
+              </ion-button>
+            </div>
+            <div *ngSwitchDefault class="breast-detail-data">
+              <ion-icon name="close-outline" class="disable-breast"
+                (click)="toggleRightBreast()">
+              </ion-icon>
+              <ion-text color="secondary">
+                <h2>Right</h2>
+              </ion-text>
+              <ion-note color="dark">
+                How'd he feed?
+              </ion-note>
+              <div class="breast-feedback">
+                <ion-icon name="happy-outline"
+                  (click)="selectRightFeedback('happy')"
+                  [class.happy-selected]="currentFeeding.breastDetails.rightRating === 'happy'">
+                </ion-icon>
+                <ion-icon name="sad-outline"
+                  (click)="selectRightFeedback('sad')"
+                  [class.sad-selected]="currentFeeding.breastDetails.rightRating === 'sad'">
+                </ion-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngSwitchCase="bottleType" class="feed-container">
+          <ion-button size="large" color="secondary" slot="start"
+            (click)="removeOunce()"
+            [disabled]="currentFeeding.bottleDetails.ounces < 1">
+            <ion-icon name="remove-outline"></ion-icon>
+          </ion-button>
+          <ion-text>
+            <h1>{{ currentFeeding.bottleDetails.ounces }} oz</h1>
+          </ion-text>
+          <ion-button size="large" color="secondary" slot="end"
+            (click)="addOunce()">
+            <ion-icon name="add-outline"></ion-icon>
+          </ion-button>
+        </div>
       </div>
+      
       <ion-button color="primary" expand="block" class="block-button"
         (click)="saveFeeding()">
         Add Feeding

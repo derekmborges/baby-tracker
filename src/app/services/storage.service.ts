@@ -52,7 +52,9 @@ export class StorageService {
     let allFeedings = await this.getAllFeedings();
     allFeedings.forEach(feeding => {
       if (feeding.id === updatedFeeding.id) {
-        feeding.ounces = updatedFeeding.ounces;
+        feeding.type = updatedFeeding.type;
+        feeding.bottleDetails = updatedFeeding.bottleDetails;
+        feeding.breastDetails = updatedFeeding.breastDetails;
         feeding.time = updatedFeeding.time;
       }
     })

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { Feeding } from '../../models/feeding';
+import { Feeding, FeedingType } from '../../models/feeding';
 import { StorageService } from '../../services/storage.service';
 import * as moment from 'moment';
 import { AlertController, ModalController, ToastController } from '@ionic/angular';
@@ -14,6 +14,9 @@ import { FeedingEditModalComponent } from '../feeding-edit-modal/feeding-edit-mo
 export class FeedingHistoryModalComponent implements OnInit {
   feedings: Feeding[];
   groupedFeedings: Map<string, Feeding[]>;
+
+  breastType = FeedingType.Breast;
+  bottleType = FeedingType.Bottle;
 
   constructor(
     public modalController: ModalController,
@@ -67,7 +70,7 @@ export class FeedingHistoryModalComponent implements OnInit {
 
   dayTotal(day: string): number {
     return this.groupedFeedings.get(day)
-      .map(f => f.ounces)
+      .map(f => f.bottleDetails ? f.bottleDetails.ounces : 0)
       .reduce((previous, current) => previous + current);
   }
 
@@ -83,7 +86,7 @@ export class FeedingHistoryModalComponent implements OnInit {
 
   async deleteFeeding(feeding: Feeding) {
     const alert = await this.alertController.create({
-      header: `Feeding: ${feeding.ounces}oz at ${formatTimeString(feeding.time)}`,
+      header: `Feeding at ${formatTimeString(feeding.time)}`,
       message: 'Are you sure you want to delete this feeding?',
       buttons: [
         {

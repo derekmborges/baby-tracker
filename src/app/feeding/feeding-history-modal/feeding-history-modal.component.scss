@@ -1,0 +1,21 @@
+.feed-icon {
+    font-size: 35px;
+}
+
+.feed-rating {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 4rem;
+}
+
+.feed-rating-icon {
+    font-size: 18px;
+}
+
+.feed-time {
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-end;
+}

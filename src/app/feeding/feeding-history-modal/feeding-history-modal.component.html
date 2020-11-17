@@ -21,14 +21,55 @@
           <ion-item-option color="primary" (click)="editFeeding(feeding)">Modify</ion-item-option>
           <ion-item-option color="danger" (click)="deleteFeeding(feeding)">Delete</ion-item-option>
         </ion-item-options>
-        <ion-item>
-          <ion-icon name="water-outline" slot="start"></ion-icon>
-          <ion-label>
-              <h3>{{ feeding.ounces }} oz</h3>
-              <p>{{ toDateString(feeding.time) }}</p>
-              <p>{{ toTimeString(feeding.time) }}</p>
-          </ion-label>
-        </ion-item>
+        <div [ngSwitch]="feeding.type === breastType">
+          <div *ngSwitchCase="true">
+            <ion-item>
+              <ion-icon class="feed-icon" color="dark" name="breastfeeding" slot="start"></ion-icon>
+              <ion-label>
+                <h3 class="feed-rating">
+                  Left: 
+                  <div [ngSwitch]="feeding.breastDetails.left === true">
+                    <div *ngSwitchCase="true">
+                      <ion-icon
+                        class="feed-rating-icon"
+                        [name]="feeding.breastDetails.leftRating === 'happy' ? 'happy-outline' : 'sad-outline'"
+                        [color]="feeding.breastDetails.leftRating === 'happy' ? 'success' : 'danger'">
+                      </ion-icon>
+                    </div>
+                    <div *ngSwitchDefault style="width: 18px;" class="ion-text-center">-</div>
+                  </div>
+                </h3>
+                <h3 class="feed-rating">
+                  Right: 
+                  <div [ngSwitch]="feeding.breastDetails.right === true">
+                    <div *ngSwitchCase="true">
+                      <ion-icon
+                        class="feed-rating-icon"
+                        [name]="feeding.breastDetails.rightRating === 'happy' ? 'happy-outline' : 'sad-outline'"
+                        [color]="feeding.breastDetails.rightRating === 'happy' ? 'success' : 'danger'">
+                      </ion-icon>
+                    </div>
+                    <div *ngSwitchDefault style="width: 18px;" class="ion-text-center">-</div>
+                  </div>
+                </h3>
+              </ion-label>
+              <ion-label class="feed-time">
+                <p>{{ toTimeString(feeding.time) }}</p>
+              </ion-label>
+            </ion-item>
+          </div>
+          <div *ngSwitchDefault>
+            <ion-item>
+              <ion-icon class="feed-icon" name="bottle" slot="start"></ion-icon>
+              <ion-label>
+                <h3>{{ feeding.bottleDetails.ounces }} oz</h3>
+              </ion-label>
+              <ion-label class="feed-time">
+                  <p>{{ toTimeString(feeding.time) }}</p>
+              </ion-label>
+            </ion-item>
+          </div>
+        </div>
       </ion-item-sliding>
     </ion-list>
   </div>

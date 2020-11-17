@@ -22,7 +22,7 @@ export class FeedingEditModalComponent implements OnInit {
   }
 
   ouncesChanged(event: any) {
-    this.feeding.ounces = event.detail.value;
+    this.feeding.bottleDetails.ounces = event.detail.value;
   }
 
   dateTimeChanged(event: any) {

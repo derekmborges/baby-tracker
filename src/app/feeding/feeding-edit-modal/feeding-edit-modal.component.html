@@ -13,9 +13,9 @@
         <ion-text>Amount</ion-text>
       </ion-list-header>
       <ion-item>
-        <ion-label>{{ feeding.ounces }}oz</ion-label>
+        <ion-label>{{ feeding.bottleDetails.ounces }}oz</ion-label>
         <ion-range min="0" max="20" step="1" snaps="true"
-          [value]="feeding.ounces" (ionChange)="ouncesChanged($event)">
+          [value]="feeding.bottleDetails.ounces" (ionChange)="ouncesChanged($event)">
           <ion-label slot="start">0</ion-label>
           <ion-label slot="end">20</ion-label>
         </ion-range>
