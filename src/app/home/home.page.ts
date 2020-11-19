@@ -18,24 +18,17 @@ export class HomePage implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     // animate title in
     this.animationController.create()
-      .addElement(this.titleElement.nativeElement)
-      .duration(1000)
-      .keyframes([
-        { offset: 0, opacity: 0 },
-        { offset: 0.5, opacity: 1}
-      ])
+      .addElement(document.getElementById('title'))
+      .duration(2000)
+      .fromTo('opacity', '0', '1')
       .play();
-
-    // animate page in
-    this.animationController.create()
+    setTimeout(() => {
+      this.animationController.create()
       .addElement(this.pageElement.nativeElement)
-      .duration(1000)
-      .keyframes([
-        { offset: 0, opacity: 0 },
-        { offset: 0.5, opacity: 0 },
-        { offset: 1, opacity: 1}
-      ])
+      .duration(500)
+      .fromTo('opacity', '0', '1')
       .play();
+    }, 1000);
   }
 
   ngOnInit() {}
