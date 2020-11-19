@@ -3,7 +3,7 @@
   <access origin="*" />
   
   <feature name="CDVOrientation">
-    <param name="android-package" value="cordova.plugins.screenorientation.CDVOrientation"/>
+    <param name="ios-package" value="CDVOrientation"/>
   </feature>
 
   

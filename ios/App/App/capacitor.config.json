@@ -1,0 +1,13 @@
+{
+  "appId": "com.borges.babyTracker",
+  "appName": "Luka Tracker",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}
