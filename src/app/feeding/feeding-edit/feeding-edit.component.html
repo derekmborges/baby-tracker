@@ -1,0 +1,117 @@
+<div class="feed-form ion-text-center">
+
+  <ion-segment class="feed-type"
+    [value]="feeding.type"
+    (ionChange)="typeChanged($event)">
+    <ion-segment-button [value]="breastType">
+      <ion-label>Breast</ion-label>
+    </ion-segment-button>
+    <ion-segment-button [value]="bottleType">
+      <ion-label>Bottle</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div [ngSwitch]="feeding.type" #feedingDetails>
+    <div *ngSwitchCase="breastType" class="feed-container">
+      <div [ngSwitch]="feeding.breastDetails.left === true"
+        class="breast-detail"
+        [class.enabled]="feeding.breastDetails.left">
+        <div *ngSwitchCase="false" class="breast-detail-disabled">
+          <ion-button color="medium" fill="clear" (click)="toggleLeftBreast()">
+            Left
+          </ion-button>
+        </div>
+        <div *ngSwitchDefault class="breast-detail-data">
+          <ion-icon name="close-outline" class="disable-breast"
+            (click)="toggleLeftBreast()">
+          </ion-icon>
+          <ion-text color="secondary">
+            <h2>Left</h2>
+          </ion-text>
+          <ion-note color="dark">
+            How'd he feed?
+          </ion-note>
+          <div class="breast-feedback">
+            <ion-icon name="happy-outline"
+              (click)="selectLeftFeedback('happy')"
+              [class.happy-selected]="feeding.breastDetails.leftRating === 'happy'">
+            </ion-icon>
+            <ion-icon name="sad-outline"
+              (click)="selectLeftFeedback('sad')"
+              [class.sad-selected]="feeding.breastDetails.leftRating === 'sad'">
+            </ion-icon>
+          </div>
+        </div>
+      </div>
+
+      <div [ngSwitch]="feeding.breastDetails.right === true"
+        class="breast-detail"
+        [class.enabled]="feeding.breastDetails.right">
+        <div *ngSwitchCase="false" class="breast-detail-disabled">
+          <ion-button color="medium" fill="clear" (click)="toggleRightBreast()">
+            Right
+          </ion-button>
+        </div>
+        <div *ngSwitchDefault class="breast-detail-data">
+          <ion-icon name="close-outline" class="disable-breast"
+            (click)="toggleRightBreast()">
+          </ion-icon>
+          <ion-text color="secondary">
+            <h2>Right</h2>
+          </ion-text>
+          <ion-note color="dark">
+            How'd he feed?
+          </ion-note>
+          <div class="breast-feedback">
+            <ion-icon name="happy-outline"
+              (click)="selectRightFeedback('happy')"
+              [class.happy-selected]="feeding.breastDetails.rightRating === 'happy'">
+            </ion-icon>
+            <ion-icon name="sad-outline"
+              (click)="selectRightFeedback('sad')"
+              [class.sad-selected]="feeding.breastDetails.rightRating === 'sad'">
+            </ion-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="bottleType" class="feed-container">
+      <ion-button size="large" color="secondary" slot="start"
+        (click)="removeOunce()"
+        [disabled]="feeding.bottleDetails.ounces < 1">
+        <ion-icon name="remove-outline"></ion-icon>
+      </ion-button>
+      <ion-text>
+        <h1>{{ feeding.bottleDetails.ounces }} oz</h1>
+      </ion-text>
+      <ion-button size="large" color="secondary" slot="end"
+        (click)="addOunce()">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+
+  <ion-list *ngIf="feeding.time">
+    <ion-list-header>
+      <ion-text>Timestamp</ion-text>
+    </ion-list-header>
+    <ion-item>
+      <ion-label>Date</ion-label>
+      <ion-datetime displayFormat="MM/DD/YYYY"
+        [value]="feeding.time"
+        (ionChange)="dateTimeChanged($event)"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Time</ion-label>
+      <ion-datetime displayFormat="h:mm a"
+        [value]="feeding.time"
+        (ionChange)="dateTimeChanged($event)"></ion-datetime>
+    </ion-item>
+  </ion-list>
+
+  <ion-button color="primary" expand="block" class="block-button"
+    (click)="save()">
+    {{ feeding.id ? 'Update Feeding' : 'Add Feeding'}}
+  </ion-button>
+</div>

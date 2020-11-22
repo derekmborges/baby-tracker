@@ -13,33 +13,19 @@ export class FeedingEditModalComponent implements OnInit {
 
   constructor(
     public modalController: ModalController,
-    public toastController: ToastController,
-    private storageService: StorageService
+    public toastController: ToastController
   ) { }
 
   ngOnInit() {
     console.log('editing feeding', this.feeding);
   }
 
-  ouncesChanged(event: any) {
-    this.feeding.bottleDetails.ounces = event.detail.value;
-  }
-
-  dateTimeChanged(event: any) {
-    this.feeding.time = event.detail.value;
-  }
-
   close() {
     this.modalController.dismiss();
   }
 
-  async save() {
-    await this.storageService.updateFeeding(this.feeding);
-    (await this.toastController.create({
-      message: 'Feeding updated',
-      duration: 3000,
-      color: 'dark'
-    })).present();
+  feedingUpdated() {
+    console.log('updated');
     this.close();
   }
 

@@ -15,22 +15,33 @@ import { FeedingHistoryModalComponent } from './feeding/feeding-history-modal/fe
 import { SleepHistoryModalComponent } from './sleep/sleep-history-modal/sleep-history-modal.component';
 import { FeedingEditModalComponent } from './feeding/feeding-edit-modal/feeding-edit-modal.component';
 import { SleepEditModalComponent } from './sleep/sleep-edit-modal/sleep-edit-modal.component';
+import { FeedingEditComponent } from './feeding/feeding-edit/feeding-edit.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { FeedingTrackerComponent } from './feeding/feeding-tracker/feeding-tracker.component';
+import { SleepTrackerComponent } from './sleep/sleep-tracker/sleep-tracker.component';
+import { HomePage } from './home/home.page';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FeedingHistoryModalComponent,
-    FeedingEditModalComponent,
+    HomePage,
+    SleepTrackerComponent,
     SleepHistoryModalComponent,
-    SleepEditModalComponent
+    SleepEditModalComponent,
+    FeedingTrackerComponent,
+    FeedingEditModalComponent,
+    FeedingEditComponent,
+    FeedingHistoryModalComponent
   ],
   entryComponents: [],
   imports: [
     BrowserModule,
-    IonicModule.forRoot({
-      mode: 'ios'
-    }),
+    IonicModule.forRoot({ mode: 'ios' }),
     IonicStorageModule.forRoot(),
+    CommonModule,
+    FormsModule,
+    IonicModule,
     AppRoutingModule
   ],
   providers: [

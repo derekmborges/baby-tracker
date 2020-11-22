@@ -44,9 +44,6 @@ export class FeedingHistoryModalComponent implements OnInit {
 
   private async getAndSortFeedings() {
     const allFeedings = await this.storageService.getAllFeedings();
-    if (allFeedings.length === 0) {
-      this.close();
-    }
     this.feedings = allFeedings.sort((a: Feeding, b: Feeding) => {
       return moment(b.time).diff(moment(a.time));
     });

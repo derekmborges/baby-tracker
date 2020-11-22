@@ -7,38 +7,10 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div *ngIf="feeding">
-    <ion-list>
-      <ion-list-header>
-        <ion-text>Amount</ion-text>
-      </ion-list-header>
-      <ion-item>
-        <ion-label>{{ feeding.bottleDetails.ounces }}oz</ion-label>
-        <ion-range min="0" max="20" step="1" snaps="true"
-          [value]="feeding.bottleDetails.ounces" (ionChange)="ouncesChanged($event)">
-          <ion-label slot="start">0</ion-label>
-          <ion-label slot="end">20</ion-label>
-        </ion-range>
-      </ion-item>
-      <ion-list-header>
-        <ion-text>When</ion-text>
-      </ion-list-header>
-      <ion-item>
-        <ion-label>Date</ion-label>
-        <ion-datetime displayFormat="MM/DD/YYYY"
-          [value]="feeding.time"
-          (ionChange)="dateTimeChanged($event)"></ion-datetime>
-      </ion-item>
-      <ion-item>
-        <ion-label>Time</ion-label>
-        <ion-datetime displayFormat="h:mm a"
-          [value]="feeding.time"
-          (ionChange)="dateTimeChanged($event)"></ion-datetime>
-      </ion-item>
-    </ion-list>
-    <ion-button color="primary" expand="block" class="save"
-      (click)="save()">
-      Save
-    </ion-button>
+  <div class="edit-feeding">
+    <app-feeding-edit
+      *ngIf="feeding" [feeding]="feeding"
+      (feedingUpdated)="feedingUpdated()">
+    </app-feeding-edit>
   </div>
 </ion-content>
