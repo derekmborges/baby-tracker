@@ -16,7 +16,7 @@ export class SleepEditModalComponent implements OnInit {
     public toastController: ToastController,
     private storageService: StorageService
   ) { }
-  
+
   ngOnInit() {
     console.log('editing sleep:', this.sleep);
   }

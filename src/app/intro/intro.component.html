@@ -1,0 +1,44 @@
+<ion-content>
+  <ion-slides pager="false" [options]="slideOpts">
+    <ion-slide></ion-slide>
+    <ion-slide>
+      <h1>Welcome!</h1>
+    </ion-slide>
+    <ion-slide>
+      <h1>Let's find out a little more about your precious baby.</h1>
+    </ion-slide>
+    <ion-slide>
+      <h1>What's their name?</h1>
+      <ion-item color="primary" class="intro-input">
+        <ion-label position="floating">Enter Name</ion-label>
+        <ion-input type="text" (ionChange)="nameChanged($event)"></ion-input>
+      </ion-item>
+      <div class="intro-action">
+        <ion-button expand="block" fill="outline" color="secondary"
+          (click)="submitName()" [disabled]="!babyInfo.name">
+          Next
+        </ion-button>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <h1>That's a great name!</h1>
+    </ion-slide>
+    <ion-slide>
+      <h1>When were they born?</h1>
+      <ion-item color="primary" class="intro-input">
+        <ion-label position="floating">Birthdate</ion-label>
+        <ion-datetime displayFormat="MM/DD/YYYY" placeholder="Select Date"
+          (ionChange)="birthdayChanged($event)"></ion-datetime>
+      </ion-item>
+      <div class="intro-action">
+        <ion-button expand="block" fill="outline" color="secondary"
+          (click)="submitBirthday()" [disabled]="!babyInfo.birthday">
+          Next
+        </ion-button>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <h1>You're all set! Track away :)</h1>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

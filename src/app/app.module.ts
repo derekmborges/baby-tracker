@@ -21,10 +21,12 @@ import { FormsModule } from '@angular/forms';
 import { FeedingTrackerComponent } from './feeding/feeding-tracker/feeding-tracker.component';
 import { SleepTrackerComponent } from './sleep/sleep-tracker/sleep-tracker.component';
 import { HomePage } from './home/home.page';
+import { IntroComponent } from './intro/intro.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    IntroComponent,
     HomePage,
     SleepTrackerComponent,
     SleepHistoryModalComponent,

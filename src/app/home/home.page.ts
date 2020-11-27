@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { AnimationController, ModalController } from '@ionic/angular';
+import { BabyInfo } from '../models/baby-info';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-home',
@@ -7,12 +9,15 @@ import { AnimationController, ModalController } from '@ionic/angular';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, AfterViewInit {
+  babyInfo: BabyInfo;
+
   @ViewChild('title') titleElement;
   @ViewChild('page') pageElement;
 
   constructor(
     public modalController: ModalController,
     public animationController: AnimationController,
+    private storageService: StorageService
   ) {}
 
   ngAfterViewInit(): void {
@@ -31,6 +36,9 @@ export class HomePage implements OnInit, AfterViewInit {
     }, 1000);
   }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    this.babyInfo = await this.storageService.getBabyInfo();
+    console.log(this.babyInfo.name);
+  }
 
 }

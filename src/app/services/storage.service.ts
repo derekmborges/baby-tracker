@@ -3,6 +3,7 @@ import { Storage } from '@ionic/storage';
 import { Feeding } from '../models/feeding';
 import { Sleep } from '../models/sleep';
 import { Guid } from '../helpers/guid';
+import { BabyInfo } from '../models/baby-info';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,14 @@ import { Guid } from '../helpers/guid';
 export class StorageService {
 
   constructor(private storage: Storage) { }
+
+  async saveBabyInfo(info: BabyInfo) {
+    await this.storage.set('babyInfo', info);
+  }
+
+  async getBabyInfo() {
+    return await this.storage.get('babyInfo');
+  }
 
   async getAllFeedings(): Promise<Feeding[]> {
     const allFeedings: Feeding[] = JSON.parse(await this.storage.get('feedings'));
@@ -49,7 +58,7 @@ export class StorageService {
   }
 
   async updateFeeding(updatedFeeding: Feeding) {
-    let allFeedings = await this.getAllFeedings();
+    const allFeedings = await this.getAllFeedings();
     allFeedings.forEach(feeding => {
       if (feeding.id === updatedFeeding.id) {
         feeding.type = updatedFeeding.type;
@@ -57,7 +66,7 @@ export class StorageService {
         feeding.breastDetails = updatedFeeding.breastDetails;
         feeding.time = updatedFeeding.time;
       }
-    })
+    });
     await this.storage.set('feedings', JSON.stringify(allFeedings));
   }
 
@@ -110,13 +119,13 @@ export class StorageService {
   }
 
   async updateSleep(updatedSleep: Sleep) {
-    let allSleep = await this.getAllSleep();
+    const allSleep = await this.getAllSleep();
     allSleep.forEach(sleep => {
       if (sleep.id === updatedSleep.id) {
         sleep.sleepTime = updatedSleep.sleepTime;
         sleep.wakeTime = updatedSleep.wakeTime;
       }
-    })
+    });
     await this.storage.set('sleep', JSON.stringify(allSleep));
   }
 }

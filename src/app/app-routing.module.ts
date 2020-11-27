@@ -1,11 +1,18 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { IntroGuard } from './guards/intro.guard';
 import { HomePage } from './home/home.page';
+import { IntroComponent } from './intro/intro.component';
 
 const routes: Routes = [
   {
     path: 'home',
-    component: HomePage
+    component: HomePage,
+    canActivate: [IntroGuard]
+  },
+  {
+    path: 'intro',
+    component: IntroComponent
   },
   {
     path: '',

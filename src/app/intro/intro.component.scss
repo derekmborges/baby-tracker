@@ -1,0 +1,23 @@
+ion-slide {
+    height: 100vh;
+    flex-direction: column;
+    text-align: justify;
+
+    background: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+}
+
+h1, p {
+    padding: 1em;
+}
+
+.intro-input {
+    width: 100%;
+    margin: 0 1rem;
+}
+
+.intro-action {
+    width: 95%;
+    max-width: 50vh;
+    margin-top: 1em;
+}
