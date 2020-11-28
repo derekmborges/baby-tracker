@@ -1,44 +1,68 @@
-<ion-content>
+<ion-content fullscreen scroll-y="false">
+  <ion-button fill="clear" *ngIf="showBackButton">
+    <ion-icon slot="start" name="arrow-back"></ion-icon>
+    Back
+  </ion-button>
   <ion-slides pager="false" [options]="slideOpts">
-    <ion-slide></ion-slide>
     <ion-slide>
-      <h1>Welcome!</h1>
+      <h2>Welcome!</h2>
+      <p>
+        I hope you find this tracker to be useful through these precious yet foundational days
+        with your little one. Let's start by personalizing the tracker for you.
+      </p>
+      <ion-button fill="clear" (click)="next()">
+        Start <ion-icon slot="end" name="arrow-forward"></ion-icon>
+      </ion-button>
     </ion-slide>
     <ion-slide>
-      <h1>Let's find out a little more about your precious baby.</h1>
-    </ion-slide>
-    <ion-slide>
-      <h1>What's their name?</h1>
-      <ion-item color="primary" class="intro-input">
-        <ion-label position="floating">Enter Name</ion-label>
+      <h2>What's his/her name?</h2>
+      <ion-item color="light" class="intro-input">
+        <ion-label position="fixed">Enter Name</ion-label>
         <ion-input type="text" (ionChange)="nameChanged($event)"></ion-input>
       </ion-item>
       <div class="intro-action">
-        <ion-button expand="block" fill="outline" color="secondary"
-          (click)="submitName()" [disabled]="!babyInfo.name">
+        <ion-button expand="block" fill="outline"
+          (click)="next()" [disabled]="!babyName">
           Next
         </ion-button>
       </div>
     </ion-slide>
     <ion-slide>
-      <h1>That's a great name!</h1>
+      <h2>Great, you're almost there.</h2>
+      <p>
+        To protect the anonomity of your baby, I won't ask for any more data. 
+        All that's left is selecting your theme and then you're off to the races.
+      </p>
+      <ion-button fill="clear" (click)="next()">
+        Continue <ion-icon slot="end" name="arrow-forward"></ion-icon>
+      </ion-button>
     </ion-slide>
     <ion-slide>
-      <h1>When were they born?</h1>
-      <ion-item color="primary" class="intro-input">
-        <ion-label position="floating">Birthdate</ion-label>
-        <ion-datetime displayFormat="MM/DD/YYYY" placeholder="Select Date"
-          (ionChange)="birthdayChanged($event)"></ion-datetime>
-      </ion-item>
-      <div class="intro-action">
-        <ion-button expand="block" fill="outline" color="secondary"
-          (click)="submitBirthday()" [disabled]="!babyInfo.birthday">
-          Next
+      <h2>Theme</h2>
+      <div class="theme-options">
+        <ion-content *ngFor="let theme of themes"
+          class="theme-option"
+          [color]="theme"
+          (click)="selectTheme(theme)"
+          [class.is-selected]="userTheme === theme">
+        </ion-content>
+      </div>
+      <div class="intro-actions">
+        <ion-button
+          [color]="userTheme"
+          (click)="next()">
+          Confirm
+        </ion-button>
+        <ion-button fill="outline" color="medium">
+          Skip
         </ion-button>
       </div>
     </ion-slide>
     <ion-slide>
-      <h1>You're all set! Track away :)</h1>
+      <h2>You're all set!</h2>
+      <ion-button fill="clear" (click)="complete()">
+        Start Tracking <ion-icon slot="end" name="arrow-forward"></ion-icon>
+      </ion-button>
     </ion-slide>
   </ion-slides>
 </ion-content>

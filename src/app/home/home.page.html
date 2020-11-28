@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title *ngIf="babyInfo">
-      {{ babyInfo.name }} Tracker
+    <ion-title>
+      <span *ngIf="babyName">{{ babyName }}</span> Tracker
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -11,13 +11,13 @@
     <ion-toolbar>
         <ion-title size="large">
           <span id="title" style="opacity: 0;">
-            <span *ngIf="babyInfo">{{ babyInfo.name }}</span> Tracker
+            <span *ngIf="babyName">{{ babyName }}</span> Tracker
           </span>
         </ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <div #page style="opacity: 0;">
+  <div #page id="page" style="opacity: 0;">
     <app-sleep-tracker></app-sleep-tracker>
     <app-feeding-tracker></app-feeding-tracker>
   </div>

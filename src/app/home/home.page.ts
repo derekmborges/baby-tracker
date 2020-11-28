@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { AnimationController, ModalController } from '@ionic/angular';
-import { BabyInfo } from '../models/baby-info';
 import { StorageService } from '../services/storage.service';
 
 @Component({
@@ -9,7 +8,7 @@ import { StorageService } from '../services/storage.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, AfterViewInit {
-  babyInfo: BabyInfo;
+  babyName: string;
 
   @ViewChild('title') titleElement;
   @ViewChild('page') pageElement;
@@ -37,8 +36,7 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-    this.babyInfo = await this.storageService.getBabyInfo();
-    console.log(this.babyInfo.name);
+    this.babyName = await this.storageService.getBabyName();
   }
 
 }

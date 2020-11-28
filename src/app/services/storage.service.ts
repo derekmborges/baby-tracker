@@ -3,7 +3,6 @@ import { Storage } from '@ionic/storage';
 import { Feeding } from '../models/feeding';
 import { Sleep } from '../models/sleep';
 import { Guid } from '../helpers/guid';
-import { BabyInfo } from '../models/baby-info';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +11,17 @@ export class StorageService {
 
   constructor(private storage: Storage) { }
 
-  async saveBabyInfo(info: BabyInfo) {
-    await this.storage.set('babyInfo', info);
+  async completeIntro(name: string, theme: string) {
+    await this.storage.set('babyName', name);
+    await this.storage.set('userTheme', theme);
   }
 
-  async getBabyInfo() {
-    return await this.storage.get('babyInfo');
+  async isNewUser(): Promise<boolean> {
+    return await this.storage.get('babyName') === null;
+  }
+
+  async getBabyName(): Promise<string> {
+    return await this.storage.get('babyName');
   }
 
   async getAllFeedings(): Promise<Feeding[]> {
