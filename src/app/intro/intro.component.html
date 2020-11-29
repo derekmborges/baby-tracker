@@ -18,7 +18,7 @@
       <h1>What's his/her name?</h1>
       <ion-item color="light" class="intro-input">
         <ion-label position="fixed">Enter Name</ion-label>
-        <ion-input type="text" (ionChange)="nameChanged($event)"></ion-input>
+        <ion-input clearInput type="text" (ionChange)="nameChanged($event)"></ion-input>
       </ion-item>
       <div class="intro-action intro-actions">
         <ion-button expand="block" shape="round" fill="outline"
@@ -36,9 +36,14 @@
         To protect the anonomity of your baby, I won't ask for any more data. 
         All that's left is selecting your theme and then you're off to the races.
       </p>
-      <ion-button fill="clear" (click)="next()">
-        Continue <ion-icon slot="end" name="arrow-forward"></ion-icon>
-      </ion-button>
+      <div class="intro-actions">
+        <ion-button fill="clear" color="medium" (click)="back()">
+          <ion-icon slot="start" name="arrow-back"></ion-icon> Back
+        </ion-button>
+        <ion-button fill="clear" (click)="next()">
+          Continue <ion-icon slot="end" name="arrow-forward"></ion-icon>
+        </ion-button>
+      </div>
     </ion-slide>
     <ion-slide>
       <h1>Theme</h1>
@@ -101,9 +106,14 @@
     </ion-slide>
     <ion-slide>
       <h2>You're all set!</h2>
-      <ion-button fill="clear" (click)="complete()">
-        Start Tracking <ion-icon slot="end" name="arrow-forward"></ion-icon>
-      </ion-button>
+      <div class="intro-actions">
+        <ion-button fill="clear" color="medium" (click)="back()">
+          <ion-icon slot="start" name="arrow-back"></ion-icon> Back
+        </ion-button>
+        <ion-button fill="clear" (click)="complete()">
+          Start Tracking <ion-icon slot="end" name="arrow-forward"></ion-icon>
+        </ion-button>
+      </div>
     </ion-slide>
   </ion-slides>
 </ion-content>
