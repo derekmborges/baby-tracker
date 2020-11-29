@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      <span *ngIf="babyName">{{ babyName }}</span> Tracker
+      {{ babyName ? babyName : 'Baby' }} Tracker
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -11,7 +11,7 @@
     <ion-toolbar>
         <ion-title size="large">
           <span id="title" style="opacity: 0;">
-            <span *ngIf="babyName">{{ babyName }}</span> Tracker
+            {{ babyName ? babyName : 'Baby' }} Tracker
           </span>
         </ion-title>
         <ion-buttons slot="end">

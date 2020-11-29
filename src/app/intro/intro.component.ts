@@ -146,8 +146,19 @@ export class IntroComponent implements OnInit {
     this.babyName = event.detail.value;
   }
 
+  skipName() {
+    this.babyName = null;
+    this.next();
+  }
+
+  skipTheme() {
+    this.selectTheme(this.themes[0]);
+    this.next();
+  }
+
   selectTheme(theme: string) {
     this.userTheme = theme;
+    this.theme.setTheme(this.userTheme);
   }
 
   async complete() {
@@ -157,7 +168,6 @@ export class IntroComponent implements OnInit {
     })).present();
     await this.storageService.saveSettings(this.babyName, this.userTheme);
     console.log('saved intro info');
-    this.theme.applyCurrentTheme();
     this.router.navigateByUrl('/');
   }
 

@@ -14,10 +14,13 @@ export class StorageService {
   async saveSettings(name: string, theme: string) {
     await this.storage.set('babyName', name);
     await this.storage.set('userTheme', theme);
+    if (await this.storage.get('introCompleted') == null) {
+      await this.storage.set('introCompleted', true);
+    }
   }
 
   async isNewUser(): Promise<boolean> {
-    return await this.storage.get('babyName') === null;
+    return !(await this.storage.get('introCompleted'));
   }
 
   async getBabyName(): Promise<string> {

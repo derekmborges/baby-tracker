@@ -5,7 +5,7 @@
   </ion-button>
   <ion-slides pager="false" [options]="slideOpts">
     <ion-slide>
-      <h2>Welcome!</h2>
+      <h1>Welcome!</h1>
       <p>
         I hope you find this tracker to be useful through these precious yet foundational days
         with your little one. Let's start by personalizing the tracker for you.
@@ -15,20 +15,23 @@
       </ion-button>
     </ion-slide>
     <ion-slide>
-      <h2>What's his/her name?</h2>
+      <h1>What's his/her name?</h1>
       <ion-item color="light" class="intro-input">
         <ion-label position="fixed">Enter Name</ion-label>
         <ion-input type="text" (ionChange)="nameChanged($event)"></ion-input>
       </ion-item>
-      <div class="intro-action">
+      <div class="intro-action intro-actions">
         <ion-button expand="block" shape="round" fill="outline"
           (click)="next()" [disabled]="!babyName">
           Next
         </ion-button>
+        <ion-button fill="outline" shape="round" color="medium" (click)="skipName()">
+          Skip
+        </ion-button>
       </div>
     </ion-slide>
     <ion-slide>
-      <h2>Great, you're almost there.</h2>
+      <h1>Great, you're almost there.</h1>
       <p>
         To protect the anonomity of your baby, I won't ask for any more data. 
         All that's left is selecting your theme and then you're off to the races.
@@ -38,22 +41,60 @@
       </ion-button>
     </ion-slide>
     <ion-slide>
-      <h2>Theme</h2>
-      <div class="theme-options">
-        <div *ngFor="let theme of themes"
-          class="theme-option"
-          [style.background]="theme === 'primary' ? '#3880ff' : 'var(--ion-color-' + theme + ')'"
-          (click)="selectTheme(theme)"
-          [class.is-selected]="userTheme === theme">
-        </div>
-      </div>
+      <h1>Theme</h1>
+      <ion-grid class="theme-grid">
+        <ion-row class="ion-align-items-center">
+          <ion-col>
+            <div class="theme-option"
+              style="background: #3880ff;"
+              (click)="selectTheme(themes[0])"
+              [class.is-selected]="userTheme === themes[0]">
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="theme-option"
+              [style.background]="'var(--ion-color-' + themes[1] + ')'"
+              (click)="selectTheme(themes[1])"
+              [class.is-selected]="userTheme === themes[1]">
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="theme-option"
+              [style.background]="'var(--ion-color-' + themes[2] + ')'"
+              (click)="selectTheme(themes[2])"
+              [class.is-selected]="userTheme === themes[2]">
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-align-items-center">
+          <ion-col>
+            <div class="theme-option"
+                [style.background]="'var(--ion-color-' + themes[3] + ')'"
+                (click)="selectTheme(themes[3])"
+                [class.is-selected]="userTheme === themes[3]">
+              </div>
+          </ion-col>
+          <ion-col>
+            <div class="theme-option"
+              [style.background]="'var(--ion-color-' + themes[4] + ')'"
+              (click)="selectTheme(themes[4])"
+              [class.is-selected]="userTheme === themes[4]">
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="theme-option"
+              [style.background]="'var(--ion-color-' + themes[5] + ')'"
+              (click)="selectTheme(themes[5])"
+              [class.is-selected]="userTheme === themes[5]">
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
       <div class="intro-actions">
-        <ion-button
-          [color]="userTheme"
-          (click)="next()">
+        <ion-button color="primary" (click)="next()">
           Confirm
         </ion-button>
-        <ion-button fill="outline" color="medium">
+        <ion-button fill="outline" color="medium" (click)="skipTheme()">
           Skip
         </ion-button>
       </div>
