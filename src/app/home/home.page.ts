@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AnimationController, ModalController } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
 
@@ -10,14 +11,17 @@ import { StorageService } from '../services/storage.service';
 export class HomePage implements OnInit, AfterViewInit {
   babyName: string;
 
-  @ViewChild('title') titleElement;
+  // @ViewChild('title') titleElement;
   @ViewChild('page') pageElement;
 
   constructor(
     public modalController: ModalController,
     public animationController: AnimationController,
-    private storageService: StorageService
-  ) {}
+    private storageService: StorageService,
+    private route: ActivatedRoute
+  ) {
+    this.route.params.subscribe(_ => this.ngOnInit());
+  }
 
   ngAfterViewInit(): void {
     // animate title in

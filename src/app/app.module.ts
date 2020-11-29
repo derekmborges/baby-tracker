@@ -22,12 +22,15 @@ import { FeedingTrackerComponent } from './feeding/feeding-tracker/feeding-track
 import { SleepTrackerComponent } from './sleep/sleep-tracker/sleep-tracker.component';
 import { HomePage } from './home/home.page';
 import { IntroComponent } from './intro/intro.component';
+import { SettingsComponent } from './settings/settings.component';
+import { ThemeService } from './services/theme.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     IntroComponent,
     HomePage,
+    SettingsComponent,
     SleepTrackerComponent,
     SleepHistoryModalComponent,
     SleepEditModalComponent,
@@ -51,6 +54,7 @@ import { IntroComponent } from './intro/intro.component';
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     StorageService,
+    ThemeService,
     ScreenOrientation
   ],
   bootstrap: [AppComponent]

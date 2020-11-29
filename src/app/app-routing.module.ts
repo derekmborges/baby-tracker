@@ -3,6 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { IntroGuard } from './guards/intro.guard';
 import { HomePage } from './home/home.page';
 import { IntroComponent } from './intro/intro.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path: 'intro',
     component: IntroComponent
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent
   },
   {
     path: '',

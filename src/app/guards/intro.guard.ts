@@ -16,7 +16,6 @@ export class IntroGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
     const isNewUser = await this.storageService.isNewUser();
-    console.log('isNewUser:', isNewUser);
     if (isNewUser) {
       this.router.navigateByUrl('intro');
     }

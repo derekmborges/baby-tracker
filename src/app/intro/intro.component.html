@@ -21,7 +21,7 @@
         <ion-input type="text" (ionChange)="nameChanged($event)"></ion-input>
       </ion-item>
       <div class="intro-action">
-        <ion-button expand="block" fill="outline"
+        <ion-button expand="block" shape="round" fill="outline"
           (click)="next()" [disabled]="!babyName">
           Next
         </ion-button>
@@ -40,12 +40,12 @@
     <ion-slide>
       <h2>Theme</h2>
       <div class="theme-options">
-        <ion-content *ngFor="let theme of themes"
+        <div *ngFor="let theme of themes"
           class="theme-option"
-          [color]="theme"
+          [style.background]="theme === 'primary' ? '#3880ff' : 'var(--ion-color-' + theme + ')'"
           (click)="selectTheme(theme)"
           [class.is-selected]="userTheme === theme">
-        </ion-content>
+        </div>
       </div>
       <div class="intro-actions">
         <ion-button

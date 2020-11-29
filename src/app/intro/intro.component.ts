@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonSlides } from '@ionic/angular';
+import { IonSlides, LoadingController } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-intro',
@@ -119,8 +120,10 @@ export class IntroComponent implements OnInit {
   };
 
   constructor(
+    public loadingCtrl: LoadingController,
     private storageService: StorageService,
-    private router: Router
+    private router: Router,
+    private theme: ThemeService
   ) { }
 
   ngOnInit() {}
@@ -148,8 +151,13 @@ export class IntroComponent implements OnInit {
   }
 
   async complete() {
-    await this.storageService.completeIntro(this.babyName, this.userTheme);
+    (await this.loadingCtrl.create({
+      message: 'Please wait...',
+      duration: 1000
+    })).present();
+    await this.storageService.saveSettings(this.babyName, this.userTheme);
     console.log('saved intro info');
+    this.theme.applyCurrentTheme();
     this.router.navigateByUrl('/');
   }
 

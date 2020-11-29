@@ -4,6 +4,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private screenOrientation: ScreenOrientation
+    private screenOrientation: ScreenOrientation,
+    private theme: ThemeService
   ) {
     this.initializeApp();
   }
@@ -28,5 +30,8 @@ export class AppComponent {
         this.splashScreen.hide();
       });
     }
+
+    // apply user's theme
+    this.theme.applyCurrentTheme();
   }
 }

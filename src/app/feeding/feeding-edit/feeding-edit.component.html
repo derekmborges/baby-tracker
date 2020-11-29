@@ -25,7 +25,7 @@
           <ion-icon name="close-outline" class="disable-breast"
             (click)="toggleLeftBreast()">
           </ion-icon>
-          <ion-text color="secondary">
+          <ion-text color="primary">
             <h2>Left</h2>
           </ion-text>
           <ion-note color="dark">
@@ -56,7 +56,7 @@
           <ion-icon name="close-outline" class="disable-breast"
             (click)="toggleRightBreast()">
           </ion-icon>
-          <ion-text color="secondary">
+          <ion-text color="primary">
             <h2>Right</h2>
           </ion-text>
           <ion-note color="dark">
@@ -77,7 +77,7 @@
     </div>
 
     <div *ngSwitchCase="bottleType" class="feed-container">
-      <ion-button size="large" color="secondary" slot="start"
+      <ion-button size="large" color="primary" slot="start"
         (click)="removeOunce()"
         [disabled]="feeding.bottleDetails.ounces < 1">
         <ion-icon name="remove-outline"></ion-icon>
@@ -85,7 +85,7 @@
       <ion-text>
         <h1>{{ feeding.bottleDetails.ounces }} oz</h1>
       </ion-text>
-      <ion-button size="large" color="secondary" slot="end"
+      <ion-button size="large" color="primary" slot="end"
         (click)="addOunce()">
         <ion-icon name="add-outline"></ion-icon>
       </ion-button>
@@ -110,7 +110,7 @@
     </ion-item>
   </ion-list>
 
-  <ion-button color="primary" expand="block" class="block-button"
+  <ion-button color="primary" expand="block" shape="round" class="block-button"
     (click)="save()">
     {{ feeding.id ? 'Update Feeding' : 'Add Feeding'}}
   </ion-button>

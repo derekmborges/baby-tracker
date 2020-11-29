@@ -11,7 +11,7 @@ export class StorageService {
 
   constructor(private storage: Storage) { }
 
-  async completeIntro(name: string, theme: string) {
+  async saveSettings(name: string, theme: string) {
     await this.storage.set('babyName', name);
     await this.storage.set('userTheme', theme);
   }
@@ -22,6 +22,10 @@ export class StorageService {
 
   async getBabyName(): Promise<string> {
     return await this.storage.get('babyName');
+  }
+
+  async getUserTheme(): Promise<string> {
+    return await this.storage.get('userTheme');
   }
 
   async getAllFeedings(): Promise<Feeding[]> {

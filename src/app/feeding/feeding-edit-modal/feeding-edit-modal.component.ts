@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import { Feeding } from 'src/app/models/feeding';
-import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-feeding-edit-modal',
