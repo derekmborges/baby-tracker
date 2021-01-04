@@ -1,5 +1,5 @@
-import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
-import { ToastController, ModalController, Platform, AnimationController } from '@ionic/angular';
+import { AfterViewInit, Component, NgZone, OnInit, ViewChild } from '@angular/core';
+import { ToastController, ModalController, Platform, AnimationController, AlertController } from '@ionic/angular';
 import { formatTimeString } from 'src/app/helpers/date-helpers';
 import { Sleep } from 'src/app/models/sleep';
 import { StorageService } from 'src/app/services/storage.service';
@@ -11,15 +11,13 @@ import { SleepHistoryModalComponent } from './sleep-history-modal/sleep-history-
   templateUrl: './sleep.component.html',
   styleUrls: ['./sleep.component.scss'],
 })
-export class SleepComponent implements OnInit {
+export class SleepComponent implements AfterViewInit, OnInit {
   @ViewChild('page') pageElement;
-  
+
   currentSleep: Sleep;
-  // previousSleep: Sleep;
-  // allSleep: Sleep[];
+  previousSleep: Sleep;
 
-  sleeping = false;
-
+  timing = false;
   sleepCounterTimer: any;
   sleepHours: string;
   sleepMinutes: string;
@@ -31,7 +29,8 @@ export class SleepComponent implements OnInit {
     public modalController: ModalController,
     private ngZone: NgZone,
     private storageService: StorageService,
-    public animationController: AnimationController
+    public animationController: AnimationController,
+    public alertController: AlertController
   ) { }
 
   get isAwake(): boolean {
@@ -56,11 +55,9 @@ export class SleepComponent implements OnInit {
 
   async ngOnInit() {
     this.currentSleep = await this.storageService.getCurrentSleep();
-    console.log(this.currentSleep);
-    // this.previousSleep = await this.storageService.getPreviousSleep();
-    // this.allSleep = await this.storageService.getAllSleep();
+    this.previousSleep = await this.storageService.getPreviousSleep();
     if (this.currentSleep) {
-      this.sleeping = true;
+      this.timing = true;
       this.updateSleepCounter();
     }
 
@@ -73,7 +70,7 @@ export class SleepComponent implements OnInit {
     this.platform.resume.subscribe(() => {
       this.ngZone.run(() => {
         console.log('app resumed');
-        if (this.sleeping) {
+        if (this.timing) {
           this.updateSleepCounter();
         }
       });
@@ -99,7 +96,7 @@ export class SleepComponent implements OnInit {
   }
 
   async startSleep() {
-    this.sleeping = true;
+    this.timing = true;
 
     // initialize sleep object
     this.currentSleep = {
@@ -109,26 +106,19 @@ export class SleepComponent implements OnInit {
     // store sleep object for persistence
     await this.storageService.saveCurrentSleep(this.currentSleep);
 
-    // let user know the sleep has been stored
-    // const toast = await this.toastController.create({
-    //   message: 'Sleep started',
-    //   duration: 3000,
-    //   color: 'dark'
-    // });
-    // toast.present();
-
     // start sleep counter
     this.updateSleepCounter();
   }
 
   endSleep() {
-    this.sleeping = false;
+    this.timing = false;
 
     // set the wake time
     this.currentSleep.endTime = new Date();
 
     // stop sleep counter
     clearInterval(this.sleepCounterTimer);
+    this.sleepCounterTimer = undefined;
   }
 
   async saveSleep() {
@@ -141,16 +131,57 @@ export class SleepComponent implements OnInit {
       duration: 3000
     });
     toast.present();
+
+    this.currentSleep = undefined;
   }
 
-  // async showSleepHistory() {
-  //   const sleepModal = await this.modalController.create({
-  //     component: SleepHistoryModalComponent,
-  //     swipeToClose: true
-  //   });
-  //   await sleepModal.present();
-  //   await sleepModal.onDidDismiss();
-  //   this.ngOnInit();
-  // }
+  async resetSleep() {
+    const alert = await this.alertController.create({
+      header: 'Confirm sleep reset',
+      message: 'Are you sure you want to reset this sleep? This cannot be undone',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: async () => {
+            await this.storageService.deleteSleep(this.currentSleep);
+            this.currentSleep = undefined;
+            if (this.sleepCounterTimer) {
+              clearInterval(this.sleepCounterTimer);
+              this.sleepCounterTimer = undefined;
+            }
+          }
+        },
+        {
+          text: 'No',
+          role: 'cancel'
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async resumeSleep() {
+    const alert = await this.alertController.create({
+      header: 'Continue sleep',
+      message: 'Are you sure you want to continue this sleep session?',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.timing = true;
+            // remove end time
+            this.currentSleep.endTime = null;
+            // start sleep counter
+            this.updateSleepCounter();
+          }
+        },
+        {
+          text: 'No',
+          role: 'cancel'
+        }
+      ]
+    });
+    await alert.present();
+  }
 
 }

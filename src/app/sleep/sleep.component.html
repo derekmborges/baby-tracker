@@ -1,12 +1,15 @@
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-      <img id="wallpaper" src="../../assets/sleep-background.jpg" height="20%">
-      <ion-title size="large">
-        <span id="title" style="opacity: 0;">
-          Sleep
-        </span>
-      </ion-title>
-  </ion-header>
+
+  <div class="header" id="title">
+    <div class="header-title">
+      <ion-text>
+        <h1>Sleep</h1>
+      </ion-text>
+      <ion-text *ngIf="previousSleep" class="subtitle">
+        <h4>Awake since: {{ toTimeString(previousSleep.endTime) }}</h4>
+      </ion-text>
+    </div>
+  </div>
 
   <div #page id="page" style="opacity: 0;">
     <div class="sleep-data">
@@ -15,8 +18,11 @@
           <h3>Start Time:</h3>
         </ion-text>
         <ion-text>
-          <h3 class="underlined">
-            {{ currentSleep && currentSleep.startTime ? toTimeString(currentSleep.startTime) : 'Set time' }}
+          <h3 class="underlined" *ngIf="currentSleep && currentSleep.startTime">
+            {{ toTimeString(currentSleep.startTime) }}
+          </h3>
+          <h3 class="underlined" *ngIf="!currentSleep || !currentSleep.startTime">
+            Set time
           </h3>
         </ion-text>
       </div>
@@ -24,55 +30,88 @@
         <ion-text>
           <h3>End Time:</h3>
         </ion-text>
-        <ion-text>
-          <h3 class="underlined">
-            {{ currentSleep && currentSleep.endTime ? toTimeString(currentSleep.endTime) : 'Set time' }}
+        <ion-text *ngIf="!timing">
+          <h3 class="underlined" *ngIf="currentSleep && currentSleep.endTime">
+            {{ toTimeString(currentSleep.endTime) }}
+          </h3>
+          <h3 class="underlined" *ngIf="!currentSleep || !currentSleep.endTime">
+            Set time
           </h3>
         </ion-text>
       </div>
     </div>
 
-    <div [ngSwitch]="sleeping === false">
-      <div *ngSwitchCase="true" class="sleep-timer">
-        <div id="timer-button-container">
-          <div class="timer-button ion-activatable ripple-parent" (click)="startSleep()">
-            <p>START<br>TIMER</p>
-            <ion-ripple-effect type="unbounded"></ion-ripple-effect>
-          </div>
-          <div class="circle" style="animation-delay: -4s;"></div>
+    <div class="sleep-timer" *ngIf="!timing && (!currentSleep || !currentSleep.endTime)">
+      <div id="timer-button-container">
+        <div class="timer-button ion-activatable ripple-parent" (click)="startSleep()">
+          <p>START<br>TIMER</p>
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+        </div>
+        <div class="circle" style="animation-delay: -4s;"></div>
+      </div>
+    </div>
+    <div class="sleep-timer" *ngIf="timing">
+      <div class="counter">
+        <div class="count">
+          <div class="count-unit">{{ sleepHours }}</div>
+          <div class="count-separator">:</div>
+          <div class="count-unit">{{ sleepMinutes }}</div>
+          <div class="count-separator">:</div>
+          <div class="count-unit">{{ sleepSeconds }}</div>
+        </div>
+        <div class="label">
+          <div class="label-unit">HOURS</div>
+          <div class="label-unit">MIN</div>
+          <div class="label-unit">SEC</div>
         </div>
       </div>
-      <div *ngSwitchDefault class="sleep-timer">
-        <div class="counter">
-          <div class="count">
-            <div class="count-unit">{{ sleepHours }}</div>
-            <div class="count-separator">:</div>
-            <div class="count-unit">{{ sleepMinutes }}</div>
-            <div class="count-separator">:</div>
-            <div class="count-unit">{{ sleepSeconds }}</div>
-          </div>
-          <div class="label">
-            <div class="label-unit">HOURS</div>
-            <div class="label-unit">MIN</div>
-            <div class="label-unit">SEC</div>
-          </div>
+      <div id="timer-button-container">
+        <div class="timer-button ion-activatable ripple-parent" (click)="endSleep()">
+          STOP
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
         </div>
-        <div id="timer-button-container">
-          <div class="timer-button ion-activatable ripple-parent" (click)="endSleep()">
-            STOP
-            <ion-ripple-effect type="unbounded"></ion-ripple-effect>
-          </div>
-          <div class="circle" style="animation-delay: -6s;"></div>
-          <div class="circle" style="animation-delay: -4s;"></div>
-          <div class="circle" style="animation-delay: -2s;"></div>
-          <div class="circle" style="animation-delay: 0s;"></div>
-        </div>
+        <div class="circle" style="animation-delay: -6s;"></div>
+        <div class="circle" style="animation-delay: -4s;"></div>
+        <div class="circle" style="animation-delay: -2s;"></div>
+        <div class="circle" style="animation-delay: 0s;"></div>
       </div>
     </div>
 
-    <div class="sleep-reset">
-      <ion-button fill="clear">
+    <div class="sleep-timer" *ngIf="!timing && currentSleep && currentSleep.endTime">
+      <div class="counter">
+        <div class="count">
+          <div class="count-unit">{{ sleepHours }}</div>
+          <div class="count-separator">:</div>
+          <div class="count-unit">{{ sleepMinutes }}</div>
+          <div class="count-separator">:</div>
+          <div class="count-unit">{{ sleepSeconds }}</div>
+        </div>
+        <div class="label">
+          <div class="label-unit">HOURS</div>
+          <div class="label-unit">MIN</div>
+          <div class="label-unit">SEC</div>
+        </div>
+      </div>
+      <div id="timer-button-container">
+        <div class="save-button ion-activatable ripple-parent" (click)="saveSleep()">
+          SAVE
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+        </div>
+        <div class="circle-save" style="animation-delay: -6s;"></div>
+        <div class="circle-save" style="animation-delay: -4s;"></div>
+        <div class="circle-save" style="animation-delay: -2s;"></div>
+        <div class="circle-save" style="animation-delay: 0s;"></div>
+      </div>
+    </div>
+
+    <div class="sleep-actions" *ngIf="currentSleep">
+      <ion-button fill="clear" (click)="resetSleep()"
+        *ngIf="currentSleep.startTime || currentSleep.endTime">
         Reset
+      </ion-button>
+      <ion-button fill="clear" (click)="resumeSleep()"
+        *ngIf="currentSleep.startTime && currentSleep.endTime">
+        Continue
       </ion-button>
     </div>
 
@@ -119,8 +158,8 @@
   </div>
 </ion-content>
 
-<ion-fab vertical="bottom" horizontal="end">
+<!-- <ion-fab vertical="bottom" horizontal="end">
   <ion-fab-button color="light">
     <ion-icon name="add"></ion-icon>
   </ion-fab-button>
-</ion-fab>
+</ion-fab> -->

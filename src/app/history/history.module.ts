@@ -2,16 +2,16 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { SettingsPageRoutingModule } from './settings-routing.module';
-import { SettingsComponent } from './settings.component';
+import { HistoryPageRoutingModule } from './history-routing.module';
+import { HistoryComponent } from './history.component';
 
 @NgModule({
     imports: [
       IonicModule,
       CommonModule,
       FormsModule,
-      SettingsPageRoutingModule
+      HistoryPageRoutingModule
     ],
-    declarations: [SettingsComponent]
+    declarations: [HistoryComponent]
   })
-  export class SettingsPageModule {}
+  export class HistoryPageModule {}
