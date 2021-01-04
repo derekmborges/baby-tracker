@@ -133,8 +133,8 @@ export class StorageService {
     const allSleep = await this.getAllSleep();
     allSleep.forEach(sleep => {
       if (sleep.id === updatedSleep.id) {
-        sleep.sleepTime = updatedSleep.sleepTime;
-        sleep.wakeTime = updatedSleep.wakeTime;
+        sleep.startTime = updatedSleep.startTime;
+        sleep.endTime = updatedSleep.endTime;
       }
     });
     await this.storage.set('sleep', JSON.stringify(allSleep));

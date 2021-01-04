@@ -9,15 +9,15 @@
   </ion-header>
 
   <div #page id="page" style="opacity: 0;">
-    <!-- <img src="../../assets/sleep-background.jpg" height="20%"> -->
-
     <div class="sleep-data">
       <div class="sleep-time">
         <ion-text>
           <h3>Start Time:</h3>
         </ion-text>
         <ion-text>
-          <h3 class="underlined">Set time</h3>
+          <h3 class="underlined">
+            {{ currentSleep && currentSleep.startTime ? toTimeString(currentSleep.startTime) : 'Set time' }}
+          </h3>
         </ion-text>
       </div>
       <div class="sleep-time">
@@ -25,24 +25,21 @@
           <h3>End Time:</h3>
         </ion-text>
         <ion-text>
-          <h3 class="underlined">Set time</h3>
+          <h3 class="underlined">
+            {{ currentSleep && currentSleep.endTime ? toTimeString(currentSleep.endTime) : 'Set time' }}
+          </h3>
         </ion-text>
       </div>
     </div>
 
-    <div [ngSwitch]="isAwake === true">
+    <div [ngSwitch]="sleeping === false">
       <div *ngSwitchCase="true" class="sleep-timer">
-        <div id="circles">
-          <div class="circle0 ion-activatable ripple-parent" (click)="toggleSleep()">
+        <div id="timer-button-container">
+          <div class="timer-button ion-activatable ripple-parent" (click)="startSleep()">
             <p>START<br>TIMER</p>
             <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           </div>
-          <!-- <button ion-button class="circle0 ion-activatable ripple-parent" (click)="toggleSleep()">
-            START<br>TIMER
-            <ion-ripple-effect type="unbounded"></ion-ripple-effect>
-          </button> -->
-          <div class="circle1" #timerCircle1></div>
-          <div class="circle2" #timerCircle2></div>
+          <div class="circle" style="animation-delay: -4s;"></div>
         </div>
       </div>
       <div *ngSwitchDefault class="sleep-timer">
@@ -60,27 +57,18 @@
             <div class="label-unit">SEC</div>
           </div>
         </div>
-        <div id="outer-circle" #timerStopCircle>
-          <div id="inner-circle" class="ion-activatable ripple-parent" (click)="toggleSleep()">
+        <div id="timer-button-container">
+          <div class="timer-button ion-activatable ripple-parent" (click)="endSleep()">
             STOP
             <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           </div>
+          <div class="circle" style="animation-delay: -6s;"></div>
+          <div class="circle" style="animation-delay: -4s;"></div>
+          <div class="circle" style="animation-delay: -2s;"></div>
+          <div class="circle" style="animation-delay: 0s;"></div>
         </div>
-        <!-- <div id="circles" style="margin-top: 3rem;">
-          <div class="circle0 ion-activatable ripple-parent" (click)="toggleSleep()">
-            STOP
-            <ion-ripple-effect type="unbounded"></ion-ripple-effect>
-          </div>
-          <div class="circle1" #timerStopCircle></div>
-        </div> -->
-        
-        <!-- <button ion-button class="ion-activatable ripple-parent" (click)="toggleSleep()">
-          STOP
-          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
-        </button> -->
       </div>
     </div>
-    
 
     <div class="sleep-reset">
       <ion-button fill="clear">

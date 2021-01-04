@@ -45,18 +45,18 @@ export class SleepHistoryModalComponent implements OnInit {
       this.close();
     }
     this.allSleep = allSleep.sort((a: Sleep, b: Sleep) => {
-      return moment(b.sleepTime).diff(moment(a.sleepTime));
+      return moment(b.startTime).diff(moment(a.startTime));
     });
   }
 
   private groupSleep() {
     const groupedSleep = new Map<string, Sleep[]>();
     this.allSleep.forEach(sleep => {
-      const key = isToday(sleep.sleepTime) ? 'Today'
-                : isYesterday(sleep.sleepTime) ? 'Yesterday'
-                : isWithinWeek(sleep.sleepTime) ? formatDayString(sleep.sleepTime)
-                : formatDateString(sleep.sleepTime);
-      console.log(`${formatDateString(sleep.sleepTime)} = ${key}`);
+      const key = isToday(sleep.startTime) ? 'Today'
+                : isYesterday(sleep.startTime) ? 'Yesterday'
+                : isWithinWeek(sleep.startTime) ? formatDayString(sleep.startTime)
+                : formatDateString(sleep.startTime);
+      console.log(`${formatDateString(sleep.startTime)} = ${key}`);
       const dayCollection = groupedSleep.get(key);
       if (!dayCollection) {
         groupedSleep.set(key, [sleep]);
@@ -68,7 +68,7 @@ export class SleepHistoryModalComponent implements OnInit {
   }
 
   sleepDuration(sleep: Sleep): string {
-    const duration = moment.duration(moment(sleep.wakeTime).diff(moment(sleep.sleepTime)));
+    const duration = moment.duration(moment(sleep.endTime).diff(moment(sleep.startTime)));
     let durationString = '';
     durationString += duration.hours() > 0 ? duration.hours + 'hr ' : '';
     durationString += duration.minutes() > 0 ? duration.minutes() + 'min ' : '';
@@ -88,7 +88,7 @@ export class SleepHistoryModalComponent implements OnInit {
 
   async deleteSleep(sleep: Sleep) {
     const alert = await this.alertController.create({
-      header: `Sleep: ${formatTimeString(sleep.sleepTime)} - ${formatTimeString(sleep.wakeTime)}`,
+      header: `Sleep: ${formatTimeString(sleep.startTime)} - ${formatTimeString(sleep.endTime)}`,
       message: 'Are you sure you want to delete this sleep?',
       buttons: [
         {

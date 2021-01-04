@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { ToastController, ModalController, Platform, AnimationController } from '@ionic/angular';
 import { formatTimeString } from 'src/app/helpers/date-helpers';
 import { Sleep } from 'src/app/models/sleep';
@@ -15,27 +15,15 @@ export class SleepComponent implements OnInit {
   @ViewChild('page') pageElement;
   
   currentSleep: Sleep;
-  previousSleep: Sleep;
-  allSleep: Sleep[];
+  // previousSleep: Sleep;
+  // allSleep: Sleep[];
 
-  // sleepCounter: string;
+  sleeping = false;
+
   sleepCounterTimer: any;
   sleepHours: string;
   sleepMinutes: string;
   sleepSeconds: string;
-
-  rotateTimer: any;
-  timerCircle1Rot = 0;
-  timerCircle2Rot = 360;
-  @ViewChild('timerCircle1') timerCircle1: ElementRef;
-  @ViewChild('timerCircle2') timerCircle2: ElementRef;
-  
-  breatheTimer: any;
-  timerStopCircleWidth = 7.0;
-  timerStopCircleDelta = 0.1;
-  timerStopCircleMin = 7.0;
-  timerStopCircleMax = 9.0;
-  @ViewChild('timerStopCircle') timerStopCircle: ElementRef;
 
   constructor(
     public platform: Platform,
@@ -43,8 +31,7 @@ export class SleepComponent implements OnInit {
     public modalController: ModalController,
     private ngZone: NgZone,
     private storageService: StorageService,
-    public animationController: AnimationController,
-    private renderer: Renderer2
+    public animationController: AnimationController
   ) { }
 
   get isAwake(): boolean {
@@ -67,51 +54,26 @@ export class SleepComponent implements OnInit {
     }, 1000);
   }
 
-  rotateTimerCircles() {
-    this.renderer.setStyle(this.timerCircle1.nativeElement, 'transform', `rotate(${this.timerCircle1Rot}deg`);
-    this.renderer.setStyle(this.timerCircle2.nativeElement, 'transform', `rotate(${this.timerCircle2Rot}deg`);
-    this.timerCircle1Rot += 0.1;
-    this.timerCircle1Rot = this.timerCircle1Rot % 360;
-    this.timerCircle2Rot -= 0.3;
-    if (this.timerCircle2Rot < -1) {
-      this.timerCircle2Rot = 359;
-    }
-  }
-
-  breatheTimerCircle() {
-    this.renderer.setStyle(this.timerStopCircle.nativeElement, 'width', `${this.timerStopCircleWidth}rem`);
-    this.renderer.setStyle(this.timerStopCircle.nativeElement, 'height', `${this.timerStopCircleWidth}rem`);
-    this.timerStopCircleWidth += this.timerStopCircleDelta;
-    if (this.timerStopCircleWidth >= this.timerStopCircleMax) {
-      this.timerStopCircleDelta = -0.01;
-    } else if (this.timerStopCircleWidth <= this.timerStopCircleMin) {
-      this.timerStopCircleDelta = 0.01;
-    }
-  }
-
   async ngOnInit() {
     this.currentSleep = await this.storageService.getCurrentSleep();
-    this.previousSleep = await this.storageService.getPreviousSleep();
-    this.allSleep = await this.storageService.getAllSleep();
+    console.log(this.currentSleep);
+    // this.previousSleep = await this.storageService.getPreviousSleep();
+    // this.allSleep = await this.storageService.getAllSleep();
     if (this.currentSleep) {
+      this.sleeping = true;
       this.updateSleepCounter();
-      this.breatheTimer = setInterval(() => this.breatheTimerCircle(), 50);
-    } else {
-      this.rotateTimer = setInterval(() => this.rotateTimerCircles(), 50);
     }
 
     // register pause and resume events
     this.platform.pause.subscribe(() => {
       console.log('app paused');
       clearInterval(this.sleepCounterTimer);
-      clearInterval(this.rotateTimer);
-      clearInterval(this.breatheTimer);
       this.sleepCounterTimer = undefined;
     });
     this.platform.resume.subscribe(() => {
       this.ngZone.run(() => {
         console.log('app resumed');
-        if (!this.isAwake) {
+        if (this.sleeping) {
           this.updateSleepCounter();
         }
       });
@@ -124,7 +86,7 @@ export class SleepComponent implements OnInit {
 
   updateSleepCounter() {
     const currentTimeMoment = moment();
-    const sleepTimeMoment = moment(this.currentSleep.sleepTime);
+    const sleepTimeMoment = moment(this.currentSleep.startTime);
     const duration = moment.duration(currentTimeMoment.diff(sleepTimeMoment));
     this.sleepHours = duration.hours().toString().padStart(2, '0');
     this.sleepMinutes = duration.minutes().toString().padStart(2, '0');
@@ -136,78 +98,59 @@ export class SleepComponent implements OnInit {
     }
   }
 
-  toggleSleep() {
-    if (this.isAwake) {
-      this.startSleep();
-    }
-    else {
-      this.endSleep();
-    }
-  }
-
   async startSleep() {
-    clearInterval(this.rotateTimer);
-
-    this.animationController.create()
-      .addElement(document.getElementById('wallpaper'))
-      .duration(500)
-      .fromTo('height', '20%', '0%')
-      .play();
+    this.sleeping = true;
 
     // initialize sleep object
     this.currentSleep = {
-      sleepTime: new Date()
+      startTime: new Date()
     } as Sleep;
 
     // store sleep object for persistence
     await this.storageService.saveCurrentSleep(this.currentSleep);
 
     // let user know the sleep has been stored
-    const toast = await this.toastController.create({
-      message: 'Sleep started',
-      duration: 3000,
-      color: 'dark'
-    });
-    toast.present();
+    // const toast = await this.toastController.create({
+    //   message: 'Sleep started',
+    //   duration: 3000,
+    //   color: 'dark'
+    // });
+    // toast.present();
 
     // start sleep counter
     this.updateSleepCounter();
-
-    this.breatheTimer = setInterval(() => this.breatheTimerCircle(), 50);
   }
 
-  async endSleep() {
-    clearInterval(this.breatheTimer);
-    // set the wake time
-    this.currentSleep.wakeTime = new Date();
+  endSleep() {
+    this.sleeping = false;
 
+    // set the wake time
+    this.currentSleep.endTime = new Date();
+
+    // stop sleep counter
+    clearInterval(this.sleepCounterTimer);
+  }
+
+  async saveSleep() {
     // store the completed sleep
     await this.storageService.saveCompleteSleep(this.currentSleep);
 
     // let user know the completed sleep is saved
     const toast = await this.toastController.create({
-      message: 'Sleep ended',
-      duration: 3000,
-      color: 'dark'
+      message: 'Sleep saved',
+      duration: 3000
     });
     toast.present();
-
-    // re-retrieve sleep data
-    this.ngOnInit();
-
-    // stop sleep counter
-    clearInterval(this.sleepCounterTimer);
-    this.rotateTimer = setInterval(() => this.rotateTimerCircles(), 50);
   }
 
-  async showSleepHistory() {
-    const sleepModal = await this.modalController.create({
-      component: SleepHistoryModalComponent,
-      swipeToClose: true
-    });
-    await sleepModal.present();
-    await sleepModal.onDidDismiss();
-    this.ngOnInit();
-  }
+  // async showSleepHistory() {
+  //   const sleepModal = await this.modalController.create({
+  //     component: SleepHistoryModalComponent,
+  //     swipeToClose: true
+  //   });
+  //   await sleepModal.present();
+  //   await sleepModal.onDidDismiss();
+  //   this.ngOnInit();
+  // }
 
 }
