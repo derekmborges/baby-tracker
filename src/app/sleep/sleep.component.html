@@ -2,11 +2,11 @@
 
   <div class="header" id="title">
     <div class="header-title">
-      <ion-text>
+      <ion-text color="light">
         <h1>Sleep</h1>
       </ion-text>
-      <ion-text *ngIf="previousSleep" class="subtitle">
-        <h4>Awake since: {{ toTimeString(previousSleep.endTime) }}</h4>
+      <ion-text *ngIf="previousSleep" class="subtitle" color="light">
+        <h5>Awake since: {{ toTimeString(previousSleep.endTime) }}</h5>
       </ion-text>
     </div>
   </div>
@@ -43,11 +43,11 @@
 
     <div class="sleep-timer" *ngIf="!timing && (!currentSleep || !currentSleep.endTime)">
       <div id="timer-button-container">
-        <div class="timer-button ion-activatable ripple-parent" (click)="startSleep()">
+        <div class="timer-button jump ion-activatable ripple-parent" (click)="startSleep()">
           <p>START<br>TIMER</p>
           <ion-ripple-effect type="unbounded"></ion-ripple-effect>
         </div>
-        <div class="circle" style="animation-delay: -4s;"></div>
+        <div class="circle" style="animation-delay: 0s;"></div>
       </div>
     </div>
     <div class="sleep-timer" *ngIf="timing">
@@ -70,10 +70,10 @@
           STOP
           <ion-ripple-effect type="unbounded"></ion-ripple-effect>
         </div>
-        <div class="circle" style="animation-delay: -6s;"></div>
-        <div class="circle" style="animation-delay: -4s;"></div>
         <div class="circle" style="animation-delay: -2s;"></div>
         <div class="circle" style="animation-delay: 0s;"></div>
+        <div class="circle" style="animation-delay: 2s;"></div>
+        <div class="circle" style="animation-delay: 4s;"></div>
       </div>
     </div>
 

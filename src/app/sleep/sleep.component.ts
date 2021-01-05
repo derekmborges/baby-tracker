@@ -143,7 +143,8 @@ export class SleepComponent implements AfterViewInit, OnInit {
         {
           text: 'Yes',
           handler: async () => {
-            await this.storageService.deleteSleep(this.currentSleep);
+            this.timing = false;
+            await this.storageService.deleteCurrentSleep();
             this.currentSleep = undefined;
             if (this.sleepCounterTimer) {
               clearInterval(this.sleepCounterTimer);

@@ -123,6 +123,10 @@ export class StorageService {
     await this.storage.remove('currentSleep');
   }
 
+  async deleteCurrentSleep() {
+    await this.storage.remove('currentSleep');
+  }
+
   async deleteSleep(sleep: Sleep) {
     let allSleep = await this.getAllSleep();
     allSleep = allSleep.filter(s => s.id !== sleep.id);
