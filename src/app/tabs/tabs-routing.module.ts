@@ -11,10 +11,10 @@ const routes: Routes = [
         path: 'sleep',
         loadChildren: () => import('../sleep/sleep.module').then(m => m.SleepPageModule)
       },
-      // {
-      //   path: 'feed',
-      //   loadChildren: () => import('../feed/feed.module').then(m => m.FeedPageModule)
-      // },
+      {
+        path: 'feed',
+        loadChildren: () => import('../feeding/feeding.module').then(m => m.FeedingPageModule)
+      },
       {
         path: 'history',
         loadChildren: () => import('../history/history.module').then(m => m.HistoryPageModule)

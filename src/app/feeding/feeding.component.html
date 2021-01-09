@@ -1,0 +1,72 @@
+<ion-content [fullscreen]="true">
+
+  <div class="header" id="title">
+    <div class="header-title">
+      <ion-text>
+        <h1>Feeding</h1>
+      </ion-text>
+      <ion-text *ngIf="previousFeeding" class="subtitle">
+        <h5>Last fed: {{ toTimeString(previousFeeding.time) }}</h5>
+      </ion-text>
+    </div>
+  </div>
+
+  <div #page id="page" style="opacity: 0;">
+
+    <div class="feeding-type">
+      <ion-segment value="breast">
+        <!-- (ionChange)="typeChanged($event)"> -->
+        <ion-segment-button value="breast">
+          <ion-label>Breast</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="bottle">
+          <ion-label>Bottle</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="solids">
+          <ion-label>Solids</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <ion-list>
+      <ion-item>
+        <ion-label>Start Time:</ion-label>
+        <ion-text slot="end">
+          <h3 class="underlined">Set time</h3>
+        </ion-text>
+      </ion-item>
+    </ion-list>
+  
+  </div>
+
+</ion-content>
+
+<!-- <ion-card>
+  <ion-item>
+    <ion-icon name="water-outline" slot="start"></ion-icon>
+    <ion-label>Food</ion-label>
+
+
+    
+    <div [ngSwitch]="previousFeeding != undefined">
+      <div *ngSwitchCase="true">
+        <ion-note slot="end" *ngIf="previousFeeding">
+          Prev: {{ toTimeString(previousFeeding.time) }}
+        </ion-note>
+      </div>
+      <div *ngSwitchDefault>
+        <ion-note slot="end">
+          No History
+        </ion-note>
+      </div>
+    </div>
+    <ion-button fill="outline" slot="end"
+      [disabled]="!allFeedings || allFeedings.length === 0"
+      (click)="showFeedingHistory()">
+      History
+    </ion-button>
+  </ion-item>
+  <ion-card-content>
+    <app-feeding-edit (feedingAdded)="feedingAdded($event)"></app-feeding-edit>
+  </ion-card-content>
+</ion-card> -->

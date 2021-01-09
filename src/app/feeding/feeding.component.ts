@@ -3,14 +3,16 @@ import { Animation, AnimationController, ModalController, ToastController } from
 import { formatTimeString } from 'src/app/helpers/date-helpers';
 import { BottleDetails, BreastDetails, Feeding, FeedingType } from 'src/app/models/feeding';
 import { StorageService } from 'src/app/services/storage.service';
-import { FeedingHistoryModalComponent } from '../feeding-history-modal/feeding-history-modal.component';
+import { FeedingHistoryModalComponent } from './feeding-history-modal/feeding-history-modal.component';
 
 @Component({
-  selector: 'app-feeding-tracker',
-  templateUrl: './feeding-tracker.component.html',
-  styleUrls: ['./feeding-tracker.component.scss'],
+  selector: 'app-feeding',
+  templateUrl: './feeding.component.html',
+  styleUrls: ['./feeding.component.scss'],
 })
-export class FeedingTrackerComponent implements OnInit {
+export class FeedingComponent implements AfterViewInit,OnInit {
+  @ViewChild('page') pageElement;
+
   previousFeeding: Feeding;
   allFeedings: Feeding[];
 
@@ -20,6 +22,22 @@ export class FeedingTrackerComponent implements OnInit {
     public animationController: AnimationController,
     private storageService: StorageService
   ) { }
+
+  ngAfterViewInit() {
+    // animate title in
+    this.animationController.create()
+      .addElement(document.getElementById('title'))
+      .duration(2000)
+      .fromTo('opacity', '0', '1')
+      .play();
+    setTimeout(() => {
+      this.animationController.create()
+      .addElement(this.pageElement.nativeElement)
+      .duration(500)
+      .fromTo('opacity', '0', '1')
+      .play();
+    }, 1000);
+  }
 
   ngOnInit() {
     this.loadData();

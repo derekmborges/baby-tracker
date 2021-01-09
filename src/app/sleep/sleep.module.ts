@@ -14,4 +14,4 @@ import { SleepPageRoutingModule } from './sleep-routing.module';
     ],
     declarations: [SleepComponent]
   })
-  export class SleepPageModule {}
+export class SleepPageModule {}
