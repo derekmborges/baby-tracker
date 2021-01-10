@@ -12,12 +12,10 @@
   </div>
 
   <div #page id="page" style="opacity: 0;">
-    <div class="sleep-data">
-      <div class="sleep-time">
-        <ion-text>
-          <h3>Start Time:</h3>
-        </ion-text>
-        <ion-text>
+    <ion-list>
+      <ion-item>
+        <ion-label>Start Time:</ion-label>
+        <ion-text slot="end">
           <h3 class="underlined" *ngIf="currentSleep && currentSleep.startTime">
             {{ toTimeString(currentSleep.startTime) }}
           </h3>
@@ -25,12 +23,10 @@
             Set time
           </h3>
         </ion-text>
-      </div>
-      <div class="sleep-time">
-        <ion-text>
-          <h3>End Time:</h3>
-        </ion-text>
-        <ion-text *ngIf="!timing">
+      </ion-item>
+      <ion-item>
+        <ion-label>End Time:</ion-label>
+        <ion-text slot="end" *ngIf="!timing">
           <h3 class="underlined" *ngIf="currentSleep && currentSleep.endTime">
             {{ toTimeString(currentSleep.endTime) }}
           </h3>
@@ -38,8 +34,8 @@
             Set time
           </h3>
         </ion-text>
-      </div>
-    </div>
+      </ion-item>
+    </ion-list>
 
     <div class="sleep-timer" *ngIf="!timing && (!currentSleep || !currentSleep.endTime)">
       <div id="timer-button-container">

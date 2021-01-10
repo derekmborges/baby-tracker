@@ -1,9 +1,3 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Settings</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
@@ -12,11 +6,6 @@
             Settings
           </span>
         </ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="close()" [color]="userTheme">
-            <ion-icon slot="icon-only" name="close"></ion-icon>
-          </ion-button>
-        </ion-buttons>
     </ion-toolbar>
   </ion-header>
 
@@ -85,12 +74,5 @@
           </ion-grid>
       </ion-item>
     </ion-list>
-
-    <div class="settings-actions">
-      <ion-button expand="block" shape="round" color="primary"
-        [color]="userTheme" (click)="save()">
-        Update
-      </ion-button>
-    </div>
   </div>
 </ion-content>
