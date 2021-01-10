@@ -28,14 +28,33 @@
       </ion-segment>
     </div>
 
-    <ion-list>
-      <ion-item>
-        <ion-label>Start Time:</ion-label>
-        <ion-text slot="end">
-          <h3 class="underlined">Set time</h3>
+    <div class="feeding-time">
+      <ion-list>
+        <ion-item>
+          <ion-label>Start Time:</ion-label>
+          <ion-text slot="end">
+            <h3 class="underlined">Set time</h3>
+          </ion-text>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div class="breast" *ngIf="feeding.type === breastType">
+      <div class="breast-circle ion-activatable ripple-parent">
+        <ion-icon name="play-outline" color="light"></ion-icon>
+        <ion-text color="light">
+          <h4>Left</h4>
         </ion-text>
-      </ion-item>
-    </ion-list>
+        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+      </div>
+      <div class="breast-circle ion-activatable ripple-parent">
+        <ion-icon name="play-outline" color="light"></ion-icon>
+        <ion-text color="light">
+          <h4>Right</h4>
+        </ion-text>
+        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+      </div>
+    </div>
   
   </div>
 

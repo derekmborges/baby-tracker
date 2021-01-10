@@ -13,8 +13,11 @@ import { FeedingHistoryModalComponent } from './feeding-history-modal/feeding-hi
 export class FeedingComponent implements AfterViewInit,OnInit {
   @ViewChild('page') pageElement;
 
+  feeding: Feeding;
+  breastType = FeedingType.Breast;
+  bottleType = FeedingType.Bottle;
+
   previousFeeding: Feeding;
-  allFeedings: Feeding[];
 
   constructor(
     public toastCtrl: ToastController,
@@ -36,16 +39,19 @@ export class FeedingComponent implements AfterViewInit,OnInit {
       .duration(500)
       .fromTo('opacity', '0', '1')
       .play();
-    }, 1000);
+    }, 500);
   }
 
   ngOnInit() {
+    this.feeding = {
+      type: this.breastType
+    } as Feeding;
+
     this.loadData();
   }
 
   private async loadData() {
     this.previousFeeding = await this.storageService.getPreviousFeeding();
-    this.allFeedings = await this.storageService.getAllFeedings();
   }
 
   toTimeString(date: Date): string {
@@ -54,16 +60,6 @@ export class FeedingComponent implements AfterViewInit,OnInit {
 
   feedingAdded(feeding: Feeding) {
     // re-load component
-    this.ngOnInit();
-  }
-
-  async showFeedingHistory() {
-    const feedingModal = await this.modalCtrl.create({
-      component: FeedingHistoryModalComponent,
-      swipeToClose: true
-    });
-    await feedingModal.present();
-    await feedingModal.onDidDismiss();
     this.ngOnInit();
   }
 
