@@ -1,0 +1,18 @@
+<div class="counter-container">
+  <div class="counter">
+    <div class="count">
+      <div class="count-unit" *ngIf="hours">{{ hours }}</div>
+      <div class="count-separator" *ngIf="hours">:</div>
+      <div class="count-unit">{{ minutes }}</div>
+      <div class="count-separator">:</div>
+      <div class="count-unit">{{ seconds }}</div>
+    </div>
+    <div class="label">
+      <div class="label-unit" *ngIf="hours">HOURS</div>
+      <div class="label-separator" *ngIf="hours"></div>
+      <div class="label-unit">MIN</div>
+      <!-- <div class="label-separator"></div> -->
+      <div class="label-unit">SEC</div>
+    </div>
+  </div>
+</div>

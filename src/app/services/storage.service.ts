@@ -81,6 +81,16 @@ export class StorageService {
     await this.storage.set('feedings', JSON.stringify(allFeedings));
   }
 
+  async getCurrentFeeding(): Promise<Feeding> {
+    return Promise.resolve(
+      JSON.parse(await this.storage.get('currentFeeding'))
+    );
+  }
+
+  async saveCurrentFeeding(currentFeeding: Feeding) {
+    const result = await this.storage.set('currentFeeding', JSON.stringify(currentFeeding));
+    console.log('saved current feeding:', result);
+  }
 
 
 

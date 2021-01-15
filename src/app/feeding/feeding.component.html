@@ -33,59 +33,89 @@
         <ion-item>
           <ion-label>Start Time:</ion-label>
           <ion-text slot="end">
-            <h3 class="underlined">Set time</h3>
+            <h3 class="underlined" *ngIf="feeding && feeding.time">
+              {{ toTimeString(feeding.time) }}
+            </h3>
+            <h3 class="underlined" *ngIf="!feeding || !feeding.time">
+              Set time
+            </h3>
           </ion-text>
         </ion-item>
       </ion-list>
     </div>
 
-    <div class="breast" *ngIf="feeding.type === breastType">
-      <div class="breast-circle ion-activatable ripple-parent">
-        <ion-icon name="play-outline" color="light"></ion-icon>
-        <ion-text color="light">
+    <div class="feeding-timer">
+      <app-counter
+        [minutes]="feedingMinutes" [seconds]="feedingSeconds"
+        *ngIf="timing || feeding.time">
+      </app-counter>
+    </div>
+
+    <div class="breast-labels">
+      <div class="breast-label">
+        <ion-text>
           <h4>Left</h4>
         </ion-text>
-        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
       </div>
-      <div class="breast-circle ion-activatable ripple-parent">
-        <ion-icon name="play-outline" color="light"></ion-icon>
-        <ion-text color="light">
+      <div class="breast-label">
+        <ion-text>
           <h4>Right</h4>
         </ion-text>
-        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
       </div>
+    </div>
+    <div class="breasts" *ngIf="feeding.type === breastType">
+      <div class="breast-circle" (click)="toggleBreastTimer('left')"
+        [class.is-active]="timing === 'left'">
+        <div [ngSwitch]="timing === 'left'" class="breast-content">
+          <div *ngSwitchCase="true">
+            <ion-icon name="pause-outline"></ion-icon>
+          </div>
+          <div *ngSwitchDefault>
+            <ion-icon name="play-outline" color="light"></ion-icon>
+          </div>
+          <ion-text class="mini-counter" *ngIf="feeding.breastDetails.leftMinutes && feeding.breastDetails.leftSeconds">
+            <h6>{{ feeding.breastDetails.leftMinutes }}:{{ feeding.breastDetails.leftSeconds }}</h6>
+          </ion-text>
+        </div>
+      </div>
+      <div class="breast-circle" (click)="toggleBreastTimer('right')"
+      [class.is-active]="timing === 'right'">
+      <div [ngSwitch]="timing === 'right'" class="breast-content">
+        <div *ngSwitchCase="true">
+          <ion-icon name="pause-outline"></ion-icon>
+        </div>
+        <div *ngSwitchDefault>
+          <ion-icon name="play-outline" color="light"></ion-icon>
+        </div>
+        <ion-text class="mini-counter" *ngIf="feeding.breastDetails.rightMinutes && feeding.breastDetails.rightSeconds">
+          <h6>{{ feeding.breastDetails.rightMinutes }}:{{ feeding.breastDetails.rightSeconds }}</h6>
+        </ion-text>
+      </div>
+      </div>
+    </div>
+
+    <div class="actions" *ngIf="!timing && !recordedTime">
+      <ion-button fill="clear">
+        Manual
+      </ion-button>
+    </div>
+    <div class="actions" *ngIf="!timing && recordedTime">
+      <ion-button fill="clear">
+        Reset
+      </ion-button>
+      <ion-button class="save" shape="round">
+        SAVE
+      </ion-button>
+      <ion-button fill="clear">
+        Edit
+      </ion-button>
+    </div>
+    <div class="actions" *ngIf="timing">
+      <ion-button fill="clear">
+        Edit Session
+      </ion-button>
     </div>
   
   </div>
 
 </ion-content>
-
-<!-- <ion-card>
-  <ion-item>
-    <ion-icon name="water-outline" slot="start"></ion-icon>
-    <ion-label>Food</ion-label>
-
-
-    
-    <div [ngSwitch]="previousFeeding != undefined">
-      <div *ngSwitchCase="true">
-        <ion-note slot="end" *ngIf="previousFeeding">
-          Prev: {{ toTimeString(previousFeeding.time) }}
-        </ion-note>
-      </div>
-      <div *ngSwitchDefault>
-        <ion-note slot="end">
-          No History
-        </ion-note>
-      </div>
-    </div>
-    <ion-button fill="outline" slot="end"
-      [disabled]="!allFeedings || allFeedings.length === 0"
-      (click)="showFeedingHistory()">
-      History
-    </ion-button>
-  </ion-item>
-  <ion-card-content>
-    <app-feeding-edit (feedingAdded)="feedingAdded($event)"></app-feeding-edit>
-  </ion-card-content>
-</ion-card> -->

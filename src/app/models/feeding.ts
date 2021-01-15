@@ -8,14 +8,18 @@ export interface Feeding {
 
 export enum FeedingType {
     Breast = 'breast',
-    Bottle = 'bottle'
+    Bottle = 'bottle',
+    Solids = 'solids'
 }
 
 export interface BreastDetails {
     left: boolean,
-    leftRating?: string,
+    leftMinutes: string,
+    leftSeconds: string,
     right: boolean,
-    rightRating?: string,
+    rightMinutes: string,
+    rightSeconds: string,
+    lastBreast: string
 }
 
 export interface BottleDetails {
