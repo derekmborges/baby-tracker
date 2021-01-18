@@ -54,7 +54,7 @@
     align-items: flex-end;
 
     .breast-label {
-        width: 7rem;
+        width: 100%;
         display: flex;
         flex-flow: column nowrap;
         justify-content: center;
@@ -64,32 +64,45 @@
 
 .breasts {
     width: 100%;
-    height: 7rem;
+    height: 10rem;
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-evenly;
     align-items: center;
+    margin-top: -1rem;
+}
+.breast-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+.breast-circle {
+    z-index: 100;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    background-color: var(--ion-color-primary);
+    box-shadow: 2px 2px 5px 0px gray;
+    cursor: pointer;
 
-    .breast-circle {
-        width: 7rem;
-        height: 7rem;
-        border-radius: 50%;
-        background-color: var(--ion-color-primary);
-
-        box-shadow: 2px 2px 5px 0px gray;
-
-        ion-icon {
-            font-size: 1.8rem;
-        }
-
-        // h4 {
-        //     margin: 0;
-        // }
+    ion-icon {
+        font-size: 1.8rem;
     }
-
-    .breast-circle.is-active {
-        background-color: var(--ion-color-medium);
-    }
+}
+.breast-circle.is-active {
+    background-color: var(--ion-color-medium);
+    width: 7.5rem;
+    height: 7.5rem;
+    box-shadow: none;
+}
+.breast-circle.is-inactive {
+    background-color: var(--ion-color-primary-tint);
+    width: 6.5rem;
+    height: 6.5rem;
 }
 .breast-content {
     width: 100%;
@@ -98,6 +111,44 @@
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+}
+.spinning-outline {
+    border-radius: 50%;
+    width: 8.5rem;
+    height: 8.5rem;
+    border: 2px dashed var(--ion-color-primary);
+    position: absolute;
+    animation: rotate 30s infinite linear;
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+}
+.last-side {
+    z-index: 200;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--ion-color-light-shade);
+    color: var(--ion-color-dark-tint);
+    position: absolute;
+    top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    line-height: 1;
+    text-align: center;
+}
+.last-side.left {
+    left: 2.5rem;
+}
+.last-side.right {
+    right: 2.5rem;
 }
 
 .feeding-timer {
@@ -111,13 +162,19 @@
 .actions {
     width: 100%;
     position: absolute;
-    bottom: 3.5rem;
+    bottom: 4rem;
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-evenly;
+    align-items: center;
 
     ion-button.save {
         width: 7rem;
         height: 3rem;
+        font-size: 22px;
+    }
+    ion-button.other {
+        width: 6rem;
+        height: 2.5rem;
     }
 }

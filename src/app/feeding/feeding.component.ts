@@ -11,7 +11,7 @@ import * as moment from 'moment';
   templateUrl: './feeding.component.html',
   styleUrls: ['./feeding.component.scss'],
 })
-export class FeedingComponent implements AfterViewInit,OnInit {
+export class FeedingComponent implements AfterViewInit, OnInit {
   @ViewChild('page') pageElement;
 
   feeding: Feeding;
@@ -108,7 +108,6 @@ export class FeedingComponent implements AfterViewInit,OnInit {
   toggleBreastTimer(side: string) {
     if (!this.timing) {
       this.timing = side;
-      this.feeding.breastDetails.lastBreast = side;
       if (side === 'left' && (!this.feeding.breastDetails.leftMinutes || !this.feeding.breastDetails.leftSeconds)) {
         this.feeding.breastDetails.leftMinutes = '00';
         this.feeding.breastDetails.leftSeconds = '00';
@@ -118,6 +117,7 @@ export class FeedingComponent implements AfterViewInit,OnInit {
       }
       this.startTimer();
     } else {
+      this.feeding.breastDetails.lastBreast = this.timing;
       const timingSide = this.timing;
       this.timing = undefined;
       this.stopTimer();
@@ -153,6 +153,31 @@ export class FeedingComponent implements AfterViewInit,OnInit {
         ]
       })).present();
     }
+  }
+
+  async resetFeeding() {
+    (await this.alertController.create({
+      header: 'Confirm feed reset',
+      message: 'Are you sure you want to reset this feed? This cannot be undone',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: async () => {
+            this.timing = false;
+            await this.storageService.deleteCurrentSleep();
+            this.ngOnInit();
+            if (this.feedingCounterTimer) {
+              clearInterval(this.feedingCounterTimer);
+              this.feedingCounterTimer = undefined;
+            }
+          }
+        },
+        {
+          text: 'No',
+          role: 'cancel'
+        }
+      ]
+    })).present();
   }
 
   manualEntry() {

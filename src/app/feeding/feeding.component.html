@@ -64,33 +64,51 @@
       </div>
     </div>
     <div class="breasts" *ngIf="feeding.type === breastType">
-      <div class="breast-circle" (click)="toggleBreastTimer('left')"
-        [class.is-active]="timing === 'left'">
-        <div [ngSwitch]="timing === 'left'" class="breast-content">
-          <div *ngSwitchCase="true">
-            <ion-icon name="pause-outline"></ion-icon>
+      <div class="breast-container">
+        <div class="breast-circle" (click)="toggleBreastTimer('left')"
+          [class.is-active]="timing === 'left'"
+          [class.is-inactive]="timing === 'right'">
+          <div [ngSwitch]="timing === 'left'" class="breast-content">
+            <div *ngSwitchCase="true">
+              <ion-icon name="pause-outline"></ion-icon>
+            </div>
+            <div *ngSwitchDefault>
+              <ion-icon name="play-outline" color="light"></ion-icon>
+            </div>
+            <ion-text class="mini-counter"
+              *ngIf="feeding.breastDetails.leftMinutes && feeding.breastDetails.leftSeconds"
+              [color]="timing === 'left' ? '' : 'light'">
+              <h6>{{ feeding.breastDetails.leftMinutes }}:{{ feeding.breastDetails.leftSeconds }}</h6>
+            </ion-text>
           </div>
-          <div *ngSwitchDefault>
-            <ion-icon name="play-outline" color="light"></ion-icon>
-          </div>
-          <ion-text class="mini-counter" *ngIf="feeding.breastDetails.leftMinutes && feeding.breastDetails.leftSeconds">
-            <h6>{{ feeding.breastDetails.leftMinutes }}:{{ feeding.breastDetails.leftSeconds }}</h6>
-          </ion-text>
+        </div>
+        <div [class.spinning-outline]="timing === 'left'"></div>
+        <div class="last-side left" *ngIf="!timing && feeding && feeding.breastDetails.lastBreast === 'left'">
+          <p>Last side</p>
         </div>
       </div>
-      <div class="breast-circle" (click)="toggleBreastTimer('right')"
-      [class.is-active]="timing === 'right'">
-      <div [ngSwitch]="timing === 'right'" class="breast-content">
-        <div *ngSwitchCase="true">
-          <ion-icon name="pause-outline"></ion-icon>
+      <div class="breast-container">
+        <div class="breast-circle" (click)="toggleBreastTimer('right')"
+          [class.is-active]="timing === 'right'"
+          [class.is-inactive]="timing === 'left'">
+          <div [ngSwitch]="timing === 'right'" class="breast-content">
+            <div *ngSwitchCase="true">
+              <ion-icon name="pause-outline"></ion-icon>
+            </div>
+            <div *ngSwitchDefault>
+              <ion-icon name="play-outline" color="light"></ion-icon>
+            </div>
+            <ion-text class="mini-counter"
+              *ngIf="feeding.breastDetails.rightMinutes && feeding.breastDetails.rightSeconds"
+              [color]="timing === 'right' ? '' : 'light'">
+              <h6>{{ feeding.breastDetails.rightMinutes }}:{{ feeding.breastDetails.rightSeconds }}</h6>
+            </ion-text>
+          </div>
         </div>
-        <div *ngSwitchDefault>
-          <ion-icon name="play-outline" color="light"></ion-icon>
+        <div class="spinning-outline" *ngIf="timing === 'right'"></div>
+        <div class="last-side right" *ngIf="!timing && feeding && feeding.breastDetails.lastBreast === 'right'">
+          <p>Last side</p>
         </div>
-        <ion-text class="mini-counter" *ngIf="feeding.breastDetails.rightMinutes && feeding.breastDetails.rightSeconds">
-          <h6>{{ feeding.breastDetails.rightMinutes }}:{{ feeding.breastDetails.rightSeconds }}</h6>
-        </ion-text>
-      </div>
       </div>
     </div>
 
@@ -100,13 +118,13 @@
       </ion-button>
     </div>
     <div class="actions" *ngIf="!timing && recordedTime">
-      <ion-button fill="clear">
+      <ion-button class="other" color="light" shape="round" (click)="resetFeeding()">
         Reset
       </ion-button>
       <ion-button class="save" shape="round">
-        SAVE
+        Save
       </ion-button>
-      <ion-button fill="clear">
+      <ion-button class="other" color="light" shape="round">
         Edit
       </ion-button>
     </div>
