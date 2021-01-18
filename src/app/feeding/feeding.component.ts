@@ -24,8 +24,8 @@ export class FeedingComponent implements AfterViewInit, OnInit {
 
   timing = undefined;
   feedingCounterTimer: any;
-  feedingMinutes: string = '00';
-  feedingSeconds: string = '00';
+  feedingMinutes: string;
+  feedingSeconds: string;
 
   constructor(
     public toastCtrl: ToastController,
@@ -54,9 +54,11 @@ export class FeedingComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     this.feeding = {
       type: this.breastType,
-      breastDetails: {
-      } as BreastDetails
+      breastDetails: {} as BreastDetails
     } as Feeding;
+
+    this.feedingMinutes = '00';
+    this.feedingSeconds = '00';
 
     this.loadData();
   }
