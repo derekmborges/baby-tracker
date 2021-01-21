@@ -4,3 +4,8 @@ image:
 tasks:
   - init: npm install
     command: ionic serve
+  - command: gp await-port 8100 && gp preview $(gp url 8100)
+
+ports:
+  - port: 8100
+    onOpen: open-preview
