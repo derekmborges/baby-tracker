@@ -22,11 +22,11 @@ export class SleepEditModalComponent implements OnInit {
   }
 
   sleepChanged(event: any) {
-    this.sleep.sleepTime = event.detail.value;
+    this.sleep.startTime = event.detail.value;
   }
 
   wakeChanged(event: any) {
-    this.sleep.wakeTime = event.detail.value;
+    this.sleep.endTime = event.detail.value;
   }
 
   close() {

@@ -59,23 +59,23 @@ export class FeedingEditComponent implements OnInit, AfterViewInit {
   toggleLeftBreast() {
     this.feeding.breastDetails.left = !this.feeding.breastDetails.left;
     if (!this.feeding.breastDetails.left) {
-      this.feeding.breastDetails.leftRating = null;
+      // this.feeding.breastDetails.leftRating = null;
     }
   }
 
   toggleRightBreast() {
     this.feeding.breastDetails.right = !this.feeding.breastDetails.right;
     if (!this.feeding.breastDetails.right) {
-      this.feeding.breastDetails.rightRating = null;
+      // this.feeding.breastDetails.rightRating = null;
     }
   }
 
   selectLeftFeedback(rating: string) {
-    this.feeding.breastDetails.leftRating = rating;
+    // this.feeding.breastDetails.leftRating = rating;
   }
 
   selectRightFeedback(rating: string) {
-    this.feeding.breastDetails.rightRating = rating;
+    // this.feeding.breastDetails.rightRating = rating;
   }
 
   addOunce() {

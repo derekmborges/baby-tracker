@@ -1,0 +1,139 @@
+<ion-content [fullscreen]="true">
+
+  <div class="header" id="title">
+    <div class="header-title">
+      <ion-text>
+        <h1>Feeding</h1>
+      </ion-text>
+      <ion-text *ngIf="previousFeeding" class="subtitle">
+        <h5>Last fed: {{ toTimeString(previousFeeding.time) }}</h5>
+      </ion-text>
+    </div>
+  </div>
+
+  <div #page id="page" style="opacity: 0;">
+    <div *ngIf="feeding">
+      <div class="feeding-type">
+        <ion-segment value="breast">
+          <!-- (ionChange)="typeChanged($event)"> -->
+          <ion-segment-button value="breast">
+            <ion-label>Breast</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="bottle">
+            <ion-label>Bottle</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="solids">
+            <ion-label>Solids</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+
+      <div class="feeding-time">
+        <ion-list>
+          <ion-item>
+            <ion-label>Start Time:</ion-label>
+            <ion-text slot="end">
+              <h3 class="underlined" *ngIf="feeding && feeding.time">
+                {{ toTimeString(feeding.time) }}
+              </h3>
+              <h3 class="underlined" *ngIf="!feeding || !feeding.time">
+                Set time
+              </h3>
+            </ion-text>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <div class="feeding-timer">
+        <app-counter
+          [minutes]="feedingMinutes" [seconds]="feedingSeconds"
+          *ngIf="timing || feeding.time">
+        </app-counter>
+      </div>
+
+      <div class="breast-labels">
+        <div class="breast-label">
+          <ion-text>
+            <h4>Left</h4>
+          </ion-text>
+        </div>
+        <div class="breast-label">
+          <ion-text>
+            <h4>Right</h4>
+          </ion-text>
+        </div>
+      </div>
+      <div class="breasts" *ngIf="feeding.type === breastType">
+        <div class="breast-container">
+          <div class="breast-circle" (click)="toggleBreastTimer('left')"
+            [class.is-active]="timing === 'left'"
+            [class.is-inactive]="timing === 'right'">
+            <div [ngSwitch]="timing === 'left'" class="breast-content">
+              <div *ngSwitchCase="true">
+                <ion-icon name="pause-outline"></ion-icon>
+              </div>
+              <div *ngSwitchDefault>
+                <ion-icon name="play-outline" color="light"></ion-icon>
+              </div>
+              <ion-text class="mini-counter"
+                *ngIf="feeding.breastDetails.leftMinutes && feeding.breastDetails.leftSeconds"
+                [color]="timing === 'left' ? '' : 'light'">
+                <h6>{{ feeding.breastDetails.leftMinutes }}:{{ feeding.breastDetails.leftSeconds }}</h6>
+              </ion-text>
+            </div>
+          </div>
+          <div [class.spinning-outline]="timing === 'left'"></div>
+          <div class="last-side left" *ngIf="!timing && feeding && feeding.breastDetails.lastBreast === 'left'">
+            <p>Last<br>side</p>
+          </div>
+        </div>
+        <div class="breast-container">
+          <div class="breast-circle" (click)="toggleBreastTimer('right')"
+            [class.is-active]="timing === 'right'"
+            [class.is-inactive]="timing === 'left'">
+            <div [ngSwitch]="timing === 'right'" class="breast-content">
+              <div *ngSwitchCase="true">
+                <ion-icon name="pause-outline"></ion-icon>
+              </div>
+              <div *ngSwitchDefault>
+                <ion-icon name="play-outline" color="light"></ion-icon>
+              </div>
+              <ion-text class="mini-counter"
+                *ngIf="feeding.breastDetails.rightMinutes && feeding.breastDetails.rightSeconds"
+                [color]="timing === 'right' ? '' : 'light'">
+                <h6>{{ feeding.breastDetails.rightMinutes }}:{{ feeding.breastDetails.rightSeconds }}</h6>
+              </ion-text>
+            </div>
+          </div>
+          <div class="spinning-outline" *ngIf="timing === 'right'"></div>
+          <div class="last-side right" *ngIf="!timing && feeding && feeding.breastDetails.lastBreast === 'right'">
+            <p>Last<br>side</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions" *ngIf="!timing && !recordedTime">
+        <ion-button fill="clear">
+          Manual
+        </ion-button>
+      </div>
+      <div class="actions" *ngIf="!timing && recordedTime">
+        <ion-button class="other" color="light" shape="round" (click)="resetFeeding()">
+          Reset
+        </ion-button>
+        <ion-button class="save" shape="round" (click)="save()">
+          Save
+        </ion-button>
+        <ion-button class="other" color="light" shape="round">
+          Edit
+        </ion-button>
+      </div>
+      <div class="actions" *ngIf="timing">
+        <ion-button fill="clear">
+          Edit Session
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+</ion-content>

@@ -67,3 +67,72 @@
 .block-button {
     margin-top: 1rem;
 }
+
+/*
+Un-used spinning circles
+
+Usage:
+<div id="circles">
+    <div class="circle0 ion-activatable ripple-parent" (click)="toggleSleep()">
+        <p>START<br>TIMER</p>
+        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+    </div>
+    <div class="circle1" #timerCircle1></div>
+    <div class="circle2" #timerCircle2></div>
+</div>
+*/
+#circles {
+    margin-top: 7rem;
+    width: 100%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    .circle0 {
+        position: relative;
+        margin-right: auto;
+        margin-left: auto;
+        width: 7rem;
+        height: 7rem;
+        border-radius: 50%;
+        z-index: 3;
+
+        background-color: var(--ion-color-primary);
+        color: var(--ion-color-primary-contrast);
+        font-size: 26px;
+        line-height: 1.2;
+        
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .circle1 {
+        position: relative;
+        margin-right: auto;
+        margin-left: auto;
+        width: 9rem;
+        height: 9rem;
+        border-radius: 50%;
+        background: none;
+        border: 2px dashed var(--ion-color-primary);
+        opacity: 0.7;
+        z-index: 2;
+        margin-top: -8rem;
+    }
+
+    .circle2 {
+        position: relative;
+        margin-right: auto;
+        margin-left: auto;
+        width: 11rem;
+        height: 11rem;
+        border-radius: 50%;
+        background: none;
+        border: 2px dashed var(--ion-color-primary);
+        opacity: 0.4;
+        z-index: 1;
+        margin-top: -10rem;
+    }
+}

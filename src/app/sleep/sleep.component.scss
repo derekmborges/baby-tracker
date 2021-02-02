@@ -1,0 +1,194 @@
+.header {
+    height: 25%;
+    background-image: url(../../assets/sleep-background.jpg);
+    background-size: 100%;
+    box-shadow: 0px 3px 5px -2px black;
+    border-radius: 0px 0px 10px 10px;
+
+    .header-title {
+        padding-left: 1rem;
+        padding-bottom: 1rem;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-end;
+
+        .subtitle {
+            color: var(--ion-color-light-shade);
+        }
+    }
+
+    .header-title h1, h5 {
+        margin-top: 0;
+        text-shadow: 1px 1px 4px black;
+    }
+}
+
+.sleep-data {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 1rem;
+}
+
+.sleep-time {
+    margin-top: 1rem;
+}
+
+.underlined {
+    border-bottom: 2px solid var(--ion-color-primary);
+    display: inline-block;
+    font-weight: 100;
+}
+
+.sleep-timer {
+    width: 100%;
+    height: 20rem;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.counter {
+    margin-top: 1rem;
+    width: 8rem;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+
+    .count {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+
+        .count-unit {
+            font-size: 28px;
+            margin-right: 0.25rem;
+        }
+
+        .count-separator {
+            font-size: 20px;
+            margin-right: 0.3rem;
+        }
+    }
+
+    .label {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        color: var(--ion-color-medium);
+
+        .label-unit {
+            font-size: 8px;
+            margin-right: 1.9rem;
+        }
+    }
+}
+
+#timer-button-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.circle {
+    border-radius: 50%;
+    background-color: var(--ion-color-primary-tint);
+    width: 8rem;
+    height: 8rem;
+    position: absolute;
+    opacity: 0;
+    animation: scaleOut 8s infinite cubic-bezier(.36, .11, .89, .32);
+    @keyframes scaleOut {
+        from {
+            transform: scale(.5, .5);
+            opacity: .5;
+        }
+        to {
+            transform: scale(2, 2);
+            opacity: 0;
+        }
+    }
+}
+
+.timer-button {
+    z-index: 100;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    background-color: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+    font-size: 26px;
+    line-height: 1.2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.jump {
+    animation: jumpOut 8s -3s infinite ease-in-out;
+    @keyframes jumpOut {
+        0% { transform: scale(1); }
+        70% { transform: scale(1); }
+        80% { transform: scale(1.04); }
+        90% { transform: scale(0.96); }
+        100% { transform: scale(1); }
+    }
+}
+
+.circle-save {
+    border-radius: 50%;
+    background-color: var(--ion-color-medium);
+    width: 8rem;
+    height: 8rem;
+    position: absolute;
+    opacity: 0;
+    animation: scaleIn 8s infinite cubic-bezier(.36, .11, .89, .32);
+    @keyframes scaleIn {
+        from {
+            transform: scale(1.5, 1.5);
+            opacity: 0;
+        }
+        to {
+            transform: scale(.5, .5);
+            opacity: .5;
+        }
+    }
+}
+
+.save-button {
+    z-index: 100;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    background-color: var(--ion-color-light-shade);
+    color: var(--ion-color-primary);
+    font-size: 26px;
+    line-height: 1.2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.sleep-actions {
+    width: 100%;
+    position: absolute;
+    bottom: 3rem;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+}
+
+.ripple-parent {
+    position: relative;
+    overflow: hidden;
+}

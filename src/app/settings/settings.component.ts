@@ -47,48 +47,15 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     this.userTheme = await this.storageService.getUserTheme();
   }
 
-  nameChanged(event: any) {
+  async nameChanged(event: any) {
     this.babyName = event.detail.value;
-  }
-
-  selectTheme(theme: string) {
-    this.userTheme = theme;
-  }
-
-  async close() {
-    const existingName = await this.storageService.getBabyName();
-    const existingTheme = await this.storageService.getUserTheme();
-    if (this.babyName !== existingName || this.userTheme !== existingTheme) {
-      (await this.alertController.create({
-        header: `Unsaved changes`,
-        message: 'Are you sure? All changes will be lost.',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel'
-          }, {
-            text: 'Confirm',
-            cssClass: 'primary',
-            handler: () => {
-              this.router.navigateByUrl('/');
-            }
-          }
-        ]
-      })).present();
-    } else {
-      this.router.navigateByUrl('/');
-    }
-  }
-
-  async save() {
     await this.storageService.saveSettings(this.babyName, this.userTheme);
-    (await this.toastController.create({
-      message: 'Settings updated',
-      color: this.userTheme,
-      duration: 4000
-    })).present();
+  }
+
+  async selectTheme(theme: string) {
+    this.userTheme = theme;
+    await this.storageService.saveSettings(this.babyName, this.userTheme);
     this.theme.applyCurrentTheme();
-    this.router.navigateByUrl('/');
   }
 
 }

@@ -38,7 +38,6 @@ export class StorageService {
 
   async getPreviousFeeding(): Promise<Feeding> {
     const allFeedings = await this.getAllFeedings();
-    console.log('all feedings:', allFeedings);
 
     // if some data exists
     if (allFeedings && allFeedings.length > 0) {
@@ -81,6 +80,20 @@ export class StorageService {
     await this.storage.set('feedings', JSON.stringify(allFeedings));
   }
 
+  async getCurrentFeeding(): Promise<Feeding> {
+    return Promise.resolve(
+      JSON.parse(await this.storage.get('currentFeeding'))
+    );
+  }
+
+  async saveCurrentFeeding(currentFeeding: Feeding) {
+    const result = await this.storage.set('currentFeeding', JSON.stringify(currentFeeding));
+    console.log('saved current feeding:', result);
+  }
+
+  async deleteCurrentFeeding() {
+    await this.storage.remove('currentFeeding');
+  }
 
 
 
@@ -123,6 +136,10 @@ export class StorageService {
     await this.storage.remove('currentSleep');
   }
 
+  async deleteCurrentSleep() {
+    await this.storage.remove('currentSleep');
+  }
+
   async deleteSleep(sleep: Sleep) {
     let allSleep = await this.getAllSleep();
     allSleep = allSleep.filter(s => s.id !== sleep.id);
@@ -133,8 +150,8 @@ export class StorageService {
     const allSleep = await this.getAllSleep();
     allSleep.forEach(sleep => {
       if (sleep.id === updatedSleep.id) {
-        sleep.sleepTime = updatedSleep.sleepTime;
-        sleep.wakeTime = updatedSleep.wakeTime;
+        sleep.startTime = updatedSleep.startTime;
+        sleep.endTime = updatedSleep.endTime;
       }
     });
     await this.storage.set('sleep', JSON.stringify(allSleep));

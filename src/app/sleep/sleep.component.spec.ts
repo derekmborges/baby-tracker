@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { SleepTrackerComponent } from './sleep-tracker.component';
+import { SleepComponent } from './sleep.component';
 
 describe('SleepTrackerComponent', () => {
-  let component: SleepTrackerComponent;
-  let fixture: ComponentFixture<SleepTrackerComponent>;
+  let component: SleepComponent;
+  let fixture: ComponentFixture<SleepComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SleepTrackerComponent ],
+      declarations: [ SleepComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SleepTrackerComponent);
+    fixture = TestBed.createComponent(SleepComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
