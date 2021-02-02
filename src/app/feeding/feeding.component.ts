@@ -1,10 +1,8 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { AlertController, Animation, AnimationController, ModalController, ToastController } from '@ionic/angular';
+import { AfterViewInit, Component, NgZone, OnInit, ViewChild } from '@angular/core';
+import { AlertController, Animation, AnimationController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { formatTimeString } from 'src/app/helpers/date-helpers';
 import { BottleDetails, BreastDetails, Feeding, FeedingType } from 'src/app/models/feeding';
 import { StorageService } from 'src/app/services/storage.service';
-import { FeedingHistoryModalComponent } from './feeding-history-modal/feeding-history-modal.component';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-feeding',
@@ -28,10 +26,12 @@ export class FeedingComponent implements AfterViewInit, OnInit {
   feedingSeconds: string;
 
   constructor(
+    public platform: Platform,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
     public animationController: AnimationController,
     public alertController: AlertController,
+    private ngZone: NgZone,
     private storageService: StorageService
   ) { }
 
@@ -51,25 +51,70 @@ export class FeedingComponent implements AfterViewInit, OnInit {
     }, 500);
   }
 
-  ngOnInit() {
-    this.feeding = {
-      type: this.breastType,
-      breastDetails: {} as BreastDetails
-    } as Feeding;
-
-    this.feedingMinutes = '00';
-    this.feedingSeconds = '00';
-
-    this.loadData();
-  }
-
-  private async loadData() {
+  async ngOnInit() {
+    this.feeding = await this.storageService.getCurrentFeeding();
+    console.log('currentFeeding: ', this.feeding);
     this.previousFeeding = await this.storageService.getPreviousFeeding();
+    
+    if (this.feeding) {
+      this.calculateTimer();
+      if (this.feeding.breastDetails.timing) {
+        this.timing = this.feeding.breastDetails.timing;
+        this.startTimer();
+      }
+    } else {
+      console.info('no current feeding. creating new object...');
+      this.feeding = {
+        type: this.breastType,
+        breastDetails: {} as BreastDetails
+      } as Feeding;
+      this.feedingMinutes = '00';
+      this.feedingSeconds = '00';
+    }
+
+    // register pause and resume events
+    this.platform.pause.subscribe(() => {
+      console.log('app paused');
+      this.stopTimer();
+    });
+    this.platform.resume.subscribe(() => {
+      this.ngZone.run(() => {
+        console.log('app resumed');
+        if (this.timing) {
+          this.updateFeedCounter();
+          this.startTimer();
+        }
+      });
+    });
   }
 
   get recordedTime(): boolean {
     return this.feeding && this.feeding.type === this.breastType && this.feeding.breastDetails !== undefined
       && (this.feedingMinutes !== '00' || this.feedingSeconds !== '00');
+  }
+
+  calculateTimer() {
+    const leftMinutes = Number.parseInt(this.feeding.breastDetails.leftMinutes || '0');
+    const leftSeconds = Number.parseInt(this.feeding.breastDetails.leftSeconds || '0');
+    const rightMinutes = Number.parseInt(this.feeding.breastDetails.rightMinutes || '0');
+    const rightSeconds = Number.parseInt(this.feeding.breastDetails.rightSeconds || '0');
+    console.log(`left: ${leftMinutes}:${leftSeconds}, right: ${rightMinutes}:${rightSeconds}`);
+    
+    let totalMinutes = leftMinutes + rightMinutes;
+    let totalSeconds = leftSeconds + rightSeconds;
+    // handle if seconds overflow into minutes
+    if (totalSeconds >= 60) {
+      totalMinutes++;
+      totalSeconds -= 60;
+    }
+
+    this.feedingMinutes = totalMinutes.toString().padStart(2, '0');
+    this.feedingSeconds = totalSeconds.toString().padStart(2, '0');
+    console.log(`calculated timer: ${this.feedingMinutes}:${this.feedingSeconds}`);
+    
+    if (Number.parseInt(this.feedingMinutes) >= 120) {
+      this.stopTimer(true);
+    }
   }
 
   updateFeedCounter() {
@@ -101,13 +146,15 @@ export class FeedingComponent implements AfterViewInit, OnInit {
     if (Number.parseInt(this.feedingMinutes) === 120) {
       this.stopTimer(true);
     }
+
+    this.updateCurrentFeeding();
   }
 
   toTimeString(date: Date): string {
     return formatTimeString(date);
   }
 
-  toggleBreastTimer(side: string) {
+  async toggleBreastTimer(side: string) {
     if (!this.timing) {
       this.timing = side;
       if (side === 'left' && (!this.feeding.breastDetails.leftMinutes || !this.feeding.breastDetails.leftSeconds)) {
@@ -118,15 +165,19 @@ export class FeedingComponent implements AfterViewInit, OnInit {
         this.feeding.breastDetails.rightSeconds = '00';
       }
       this.startTimer();
+      this.feeding.breastDetails.timing = this.timing;
     } else {
       this.feeding.breastDetails.lastBreast = this.timing;
       const timingSide = this.timing;
       this.timing = undefined;
       this.stopTimer();
+      this.feeding.breastDetails.timing = this.timing;
       if (timingSide !== side) {
         this.toggleBreastTimer(side);
       }
     }
+
+    this.updateCurrentFeeding();
   }
 
   async startTimer() {
@@ -134,9 +185,6 @@ export class FeedingComponent implements AfterViewInit, OnInit {
     if (!this.feeding.time) {
       this.feeding.time = new Date();
     }
-    // store feeding object for persistence
-    // await this.storageService.saveCurrentFeeding(this.feeding);
-
     // start feed counter
     this.feedingCounterTimer = setInterval(() => this.updateFeedCounter(), 1000);
   }
@@ -157,6 +205,11 @@ export class FeedingComponent implements AfterViewInit, OnInit {
     }
   }
 
+  async updateCurrentFeeding() {
+    // store current feeding object for persistence
+    await this.storageService.saveCurrentFeeding(this.feeding);
+  }
+
   async resetFeeding() {
     (await this.alertController.create({
       header: 'Confirm feed reset',
@@ -166,7 +219,7 @@ export class FeedingComponent implements AfterViewInit, OnInit {
           text: 'Yes',
           handler: async () => {
             this.timing = false;
-            await this.storageService.deleteCurrentSleep();
+            await this.storageService.deleteCurrentFeeding();
             this.ngOnInit();
             if (this.feedingCounterTimer) {
               clearInterval(this.feedingCounterTimer);
@@ -180,6 +233,19 @@ export class FeedingComponent implements AfterViewInit, OnInit {
         }
       ]
     })).present();
+  }
+
+  async save() {
+    await this.storageService.saveFeeding(this.feeding);
+    await this.storageService.deleteCurrentFeeding();
+    this.feeding = undefined;
+
+    (await this.toastCtrl.create({
+      message: 'Feeding saved',
+      duration: 3000
+    })).present();
+
+    this.ngOnInit();
   }
 
   manualEntry() {

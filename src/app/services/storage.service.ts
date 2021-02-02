@@ -38,7 +38,6 @@ export class StorageService {
 
   async getPreviousFeeding(): Promise<Feeding> {
     const allFeedings = await this.getAllFeedings();
-    console.log('all feedings:', allFeedings);
 
     // if some data exists
     if (allFeedings && allFeedings.length > 0) {
@@ -90,6 +89,10 @@ export class StorageService {
   async saveCurrentFeeding(currentFeeding: Feeding) {
     const result = await this.storage.set('currentFeeding', JSON.stringify(currentFeeding));
     console.log('saved current feeding:', result);
+  }
+
+  async deleteCurrentFeeding() {
+    await this.storage.remove('currentFeeding');
   }
 
 

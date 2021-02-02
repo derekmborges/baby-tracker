@@ -19,7 +19,8 @@ export interface BreastDetails {
     right: boolean,
     rightMinutes: string,
     rightSeconds: string,
-    lastBreast: string
+    lastBreast: string,
+    timing: boolean
 }
 
 export interface BottleDetails {
