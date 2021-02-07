@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'beevelop/ionic'
+            image 'woahbase/alpine-ionic:latest'
             args '-p 3000:3000'
         }
     }
